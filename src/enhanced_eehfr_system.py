@@ -63,6 +63,13 @@ class SystemConfig:
     # 实验参数
     simulation_rounds: int = 100                # 仿真轮数
     data_collection_interval: int = 5           # 数据收集间隔
+    # SoD 参数
+    sod_enabled: bool = True
+    sod_mode: str = "adaptive"                 # "fixed" | "adaptive"
+    sod_k: float = 1.5
+    sod_window: int = 24
+    sod_delta_day: float = 0.5
+    sod_delta_night: float = 0.2
 
 @dataclass
 class PerformanceMetrics:
@@ -95,6 +102,8 @@ class PerformanceMetrics:
     prediction_accuracy: float = 0.0
     prediction_mae: float = 0.0
     prediction_rmse: float = 0.0
+    # SoD 指标
+    sod_trigger_ratio: float = 1.0
 
 class EnhancedEEHFRSystem:
     """Enhanced EEHFR WSN 完整系统"""
@@ -135,6 +144,7 @@ class EnhancedEEHFRSystem:
 
         # SoD 控制器（按节点管理）
         self.sod_controllers: Dict[int, SoDController] = {}
+        self.sod_stats = {"candidates": 0, "sent": 0}
         
         print("Enhanced EEHFR WSN System 初始化完成")
     
@@ -202,6 +212,9 @@ class EnhancedEEHFRSystem:
     
     def generate_sensor_data(self, round_num: int):
         """生成传感器数据"""
+        # 每轮重置 SoD 统计
+        self.sod_stats = {"candidates": 0, "sent": 0}
+
         # 模拟温度、湿度、光照等传感器数据
         for node_id, node in self.nodes.items():
             if node['is_alive']:
@@ -227,17 +240,28 @@ class EnhancedEEHFRSystem:
                 }
 
                 # SoD 门控：仅当超过阈值才进入发送缓冲
-                # 以温度作为触发信号（可扩展为多通道融合）
-                if node_id not in self.sod_controllers:
-                    self.sod_controllers[node_id] = SoDController(SoDConfig())
+                if self.config.sod_enabled:
+                    if node_id not in self.sod_controllers:
+                        cfg = SoDConfig(
+                            mode=self.config.sod_mode,
+                            k=self.config.sod_k,
+                            window=self.config.sod_window,
+                            delta_day=self.config.sod_delta_day,
+                            delta_night=self.config.sod_delta_night,
+                        )
+                        self.sod_controllers[node_id] = SoDController(cfg)
 
-                # 使用“小时”近似 day/night（每 10 轮 ≈ 1 小时，可按需调整映射）
-                pseudo_hour = (round_num // 10) % 24
-                should_send, used_delta = self.sod_controllers[node_id].update_and_should_send(
-                    float(temp), int(pseudo_hour)
-                )
-
-                if should_send:
+                    # 使用“小时”近似 day/night（每 10 轮 ≈ 1 小时，可按需调整映射）
+                    pseudo_hour = (round_num // 10) % 24
+                    self.sod_stats["candidates"] += 1
+                    should_send, used_delta = self.sod_controllers[node_id].update_and_should_send(
+                        float(temp), int(pseudo_hour)
+                    )
+                    if should_send:
+                        self.sod_stats["sent"] += 1
+                        node['data_buffer'].append(sensor_reading)
+                        self.sensor_data.append(sensor_reading)
+                else:
                     node['data_buffer'].append(sensor_reading)
                     self.sensor_data.append(sensor_reading)
     
@@ -508,6 +532,12 @@ class EnhancedEEHFRSystem:
         metrics.throughput = len(alive_nodes) * 10  # 简化计算
         metrics.average_hop_count = np.random.uniform(2, 5)
         metrics.routing_overhead = np.random.uniform(0.1, 0.3)
+
+        # 记录 SoD 触发率（若启用）
+        if self.config.sod_enabled and self.sod_stats["candidates"] > 0:
+            metrics.sod_trigger_ratio = self.sod_stats["sent"] / max(1, self.sod_stats["candidates"])
+        else:
+            metrics.sod_trigger_ratio = 1.0
         
         return metrics
     

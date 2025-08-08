@@ -17,6 +17,8 @@ WSN-Intel-Lab-Project — 开发变更记录
   - 引入 `SoDController/SoDConfig`，在 `EnhancedEEHFRSystem` 初始化中维护 `self.sod_controllers`。
   - 在 `generate_sensor_data()` 中，用温度作为触发信号，对每个节点执行 SoD 判定；仅当 `should_send=True` 时将读数加入 `node['data_buffer']` 与 `self.sensor_data`。
   - 采用 `pseudo_hour = (round_num // 10) % 24` 粗略映射昼/夜（可根据真实时间戳替换）。
+  - 在 `SystemConfig` 中加入 SoD 开关与参数（`sod_enabled/mode/k/window/delta_day/delta_night`）。
+  - 新增每轮 SoD 统计（`candidates/sent`）并在 `PerformanceMetrics` 中记录 `sod_trigger_ratio`。
 
 3) 目的与预期影响
 - 目的：将“数据面”节能机制落地，减少上行报文与能耗，呼应论文 SoD/双预测思路。
