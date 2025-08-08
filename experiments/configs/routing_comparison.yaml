@@ -1,0 +1,56 @@
+# WSN路由协议比较实验配置文件
+
+# 网络参数
+network:
+  node_count: 30          # 节点数量
+  area_size: [100, 100]   # 区域大小
+  transmission_range: 30  # 传输范围
+
+# 仿真参数
+simulation:
+  num_packets: 200        # 数据包数量
+  source_nodes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  # 源节点列表
+  sink_node: 0            # 汇聚节点
+  random_seed: 42         # 随机种子
+
+# 协议参数
+protocols:
+  # LEACH协议参数
+  leach:
+    p: 0.1                # 簇头选择概率
+    rounds: 20            # 轮数
+  
+  # PSO路由协议参数
+  pso:
+    n_particles: 30        # 粒子数量
+    dimensions: 15         # 维度
+    w: 0.7                 # 惯性权重
+    c1: 1.5                # 个体学习因子
+    c2: 1.5                # 社会学习因子
+    max_iter: 50           # 最大迭代次数
+  
+  # 混合智能节能路由协议参数
+  hybrid:
+    alpha: 0.6             # 能耗权重
+    beta: 0.3              # 预测误差权重
+    gamma: 0.1             # 数据可靠性权重
+    pso_params:
+      n_particles: 30
+      dimensions: 15
+      w: 0.7
+      c1: 1.5
+      c2: 1.5
+      max_iter: 50
+    lstm_params:
+      input_size: 4
+      hidden_size: 64
+      num_layers: 2
+      output_size: 4
+      seq_length: 24
+
+# 输出设置
+output:
+  results_dir: "../results/data"    # 结果数据保存目录
+  figures_dir: "../results/figures" # 图表保存目录
+  save_network: true                # 是否保存网络状态
+  save_routes: true                 # 是否保存路由路径

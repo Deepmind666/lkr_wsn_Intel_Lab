@@ -1,0 +1,31 @@
+# 基础科学计算和数据处理
+numpy>=1.20.0
+pandas>=1.3.0
+matplotlib>=3.4.0
+scipy>=1.7.0
+scikit-learn>=1.0.0
+
+# 网络分析和图形处理
+networkx>=2.6.0
+
+# 深度学习框架（根据需要选择）
+torch>=1.9.0  # PyTorch
+# tensorflow>=2.6.0  # TensorFlow
+
+# 时序分析
+statsmodels>=0.12.0
+
+# 优化算法
+pyswarms>=1.3.0  # 粒子群优化
+deap>=1.3.1  # 遗传算法
+
+# 可视化增强
+seaborn>=0.11.0
+plotly>=5.3.0
+
+# 工具和辅助库
+tqdm>=4.62.0  # 进度条
+joblib>=1.0.0  # 并行计算
+
+# 数据集下载和处理
+requests>=2.26.0

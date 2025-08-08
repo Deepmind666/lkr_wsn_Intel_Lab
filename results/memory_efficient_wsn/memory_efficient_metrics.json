@@ -1,0 +1,15 @@
+{
+  "data_coverage": {
+    "total_records": 472191,
+    "unique_nodes": 17,
+    "sufficient_nodes": 17,
+    "memory_optimized": true
+  },
+  "prediction_mae": [
+    0.2171018123626709
+  ],
+  "prediction_rmse": [
+    0.34052708745002747
+  ],
+  "memory_usage": []
+}

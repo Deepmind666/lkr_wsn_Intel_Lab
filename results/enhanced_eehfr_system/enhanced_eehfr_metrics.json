@@ -1,0 +1,47 @@
+{
+  "system_performance": {
+    "total_energy_consumption": 110.33,
+    "prediction_accuracy": 0.8549569169709063,
+    "average_trust_score": 0.8441657374117862,
+    "routing_efficiency": 0.8600450573089538,
+    "network_lifetime": -103.29999999999995,
+    "cluster_heads": [
+      12,
+      1,
+      10,
+      11,
+      2,
+      20
+    ],
+    "trust_scores": [
+      0.8425813283142816,
+      0.8025794521275151,
+      0.8482669812028775,
+      0.8656281289761337,
+      0.8115789775603885,
+      0.8943595562895214
+    ],
+    "pso_aco_results": {
+      "optimal_clusters": [
+        12,
+        1,
+        10,
+        11,
+        2,
+        20
+      ],
+      "optimal_route": [
+        0,
+        2,
+        3,
+        5,
+        4,
+        6,
+        1
+      ],
+      "pso_score": -1.3026937644499867,
+      "aco_cost": 158.88064610446634
+    }
+  },
+  "lstm_metrics": {
+    "mae": 

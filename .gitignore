@@ -1,0 +1,54 @@
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env
+.env.*
+
+# Editors/OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+.ipynb_checkpoints/
+
+# Build/dist
+build/
+dist/
+*.egg-info/
+.cache/
+
+# Logs
+*.log
+logs/
+
+# Project data (keep only README)
+data/**
+!data/README.md
+
+# LaTeX build artifacts
+docs/*.aux
+docs/*.out
+docs/*.log
+docs/*.toc
+docs/*.bbl
+docs/*.blg
+docs/*.synctex.gz
+
+# Temporary files
+*.tmp
+*.temp
+
+
