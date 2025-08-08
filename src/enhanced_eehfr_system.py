@@ -33,6 +33,7 @@ from pso_optimizer import PSOOptimizer
 from aco_router import ACORouter
 from lstm_predictor import WSNLSTMSystem
 from trust_evaluator import TrustEvaluator, TrustMetrics
+from src.utils.sod import SoDController, SoDConfig
 
 @dataclass
 class SystemConfig:
@@ -131,6 +132,9 @@ class EnhancedEEHFRSystem:
         self.sensor_data = []
         self.energy_data = []
         self.trust_data = []
+
+        # SoD 控制器（按节点管理）
+        self.sod_controllers: Dict[int, SoDController] = {}
         
         print("Enhanced EEHFR WSN System 初始化完成")
     
@@ -221,9 +225,21 @@ class EnhancedEEHFRSystem:
                     'light': light,
                     'energy': node['energy']
                 }
-                
-                node['data_buffer'].append(sensor_reading)
-                self.sensor_data.append(sensor_reading)
+
+                # SoD 门控：仅当超过阈值才进入发送缓冲
+                # 以温度作为触发信号（可扩展为多通道融合）
+                if node_id not in self.sod_controllers:
+                    self.sod_controllers[node_id] = SoDController(SoDConfig())
+
+                # 使用“小时”近似 day/night（每 10 轮 ≈ 1 小时，可按需调整映射）
+                pseudo_hour = (round_num // 10) % 24
+                should_send, used_delta = self.sod_controllers[node_id].update_and_should_send(
+                    float(temp), int(pseudo_hour)
+                )
+
+                if should_send:
+                    node['data_buffer'].append(sensor_reading)
+                    self.sensor_data.append(sensor_reading)
     
     def run_fuzzy_cluster_selection(self, round_num: int):
         """运行模糊逻辑簇头选择"""
