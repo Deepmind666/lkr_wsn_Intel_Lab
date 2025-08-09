@@ -29,4 +29,8 @@ WSN-Intel-Lab-Project — 开发变更记录
 - 扩展 SoD 触发到多通道（温/湿/光结合或选择最敏感通道）。
 - 在 `experiments/` 中新增配置项：`sod.mode/k/window/delta_day/delta_night`，并输出 SoD 触发率与节能比。
 
+5) 新增最小消融实验
+- 新文件：`experiments/sod_ablation.py`
+- 作用：对比 SoD 开/关对能耗、最终存活、平均触发率的影响；输出 JSON 与图表到 `experiments/results/`。
+
 
