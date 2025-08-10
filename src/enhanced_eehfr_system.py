@@ -76,6 +76,8 @@ class SystemConfig:
     payload_bits: int = 1024                     # 每报文比特数
     idle_cpu_time_s: float = 0.001               # 每轮非发送时的CPU活跃时间（近似）
     idle_lpm_time_s: float = 0.004               # 每轮低功耗时间（近似）
+    # 随机种子
+    random_seed: Optional[int] = None
     # SoD 参数
     sod_enabled: bool = True
     sod_mode: str = "adaptive"                 # "fixed" | "adaptive"
@@ -186,7 +188,7 @@ class EnhancedEEHFRSystem:
                 }
         else:
             # 生成节点位置
-            np.random.seed(42)
+            np.random.seed(self.config.random_seed if self.config.random_seed is not None else 42)
             for i in range(self.config.num_nodes):
                 x = np.random.uniform(0, self.config.network_size[0])
                 y = np.random.uniform(0, self.config.network_size[1])
@@ -448,52 +450,80 @@ class EnhancedEEHFRSystem:
     def simulate_data_transmission(self, round_num: int):
         """模拟数据传输和能耗"""
         total_energy_consumed = 0.0
-        
+
+        # 1) 普通节点 -> 最近簇头 一跳上报
         for node_id, node in self.nodes.items():
-            if not node['is_alive'] or not node['data_buffer']:
-                # 无上报也有MCU能耗
-                node['energy'] -= self.energy_model.cpu_energy(self.config.idle_cpu_time_s)
-                node['energy'] -= self.energy_model.lpm_energy(self.config.idle_lpm_time_s)
-                if node['energy'] <= 0:
-                    node['is_alive'] = False
-                    node['energy'] = 0.0
+            if not node['is_alive']:
                 continue
-            
-            # 计算传输能耗（radio tx + mcu）
-            if node['is_cluster_head']:
-                # 簇头节点：收集数据 + 转发到基站
-                transmission_distance = self._calculate_distance(
-                    node['position'], 
-                    self.config.base_station_pos
-                )
-                tx = self.energy_model.radio_tx_energy(self.config.payload_bits, transmission_distance)
-                rx = 0.0
-                energy_cost = tx + self.energy_model.cpu_energy(self.config.idle_cpu_time_s)
-            else:
-                # 普通节点：发送到簇头
-                cluster_head = self._find_nearest_cluster_head(node_id)
-                if cluster_head is not None:
-                    transmission_distance = self._calculate_distance(
-                        node['position'], 
-                        self.nodes[cluster_head]['position']
-                    )
-                    tx = self.energy_model.radio_tx_energy(self.config.payload_bits, transmission_distance)
-                    energy_cost = tx + self.energy_model.cpu_energy(self.config.idle_cpu_time_s)
+            if node['data_buffer'] and not node['is_cluster_head']:
+                ch = self._find_nearest_cluster_head(node_id)
+                if ch is not None and self.nodes[ch]['is_alive']:
+                    d = self._calculate_distance(self.nodes[node_id]['position'], self.nodes[ch]['position'])
+                    tx = self.energy_model.radio_tx_energy(self.config.payload_bits, d)
+                    # 发送节点能量
+                    node['energy'] -= (tx + self.energy_model.cpu_energy(self.config.idle_cpu_time_s))
+                    total_energy_consumed += (tx + self.energy_model.cpu_energy(self.config.idle_cpu_time_s))
+                    # 接收端簇头的接收能量
+                    rx = self.energy_model.radio_rx_energy(self.config.payload_bits)
+                    self.nodes[ch]['energy'] -= (rx + self.energy_model.cpu_energy(self.config.idle_cpu_time_s))
+                    total_energy_consumed += (rx + self.energy_model.cpu_energy(self.config.idle_cpu_time_s))
                 else:
-                    energy_cost = self.energy_model.cpu_energy(self.config.idle_cpu_time_s)
-            
-            # 更新节点能量
-            node['energy'] -= energy_cost
-            total_energy_consumed += energy_cost
-            
-            # 检查节点是否死亡
+                    # 无簇头，仅MCU消耗
+                    node['energy'] -= self.energy_model.cpu_energy(self.config.idle_cpu_time_s)
+                    total_energy_consumed += self.energy_model.cpu_energy(self.config.idle_cpu_time_s)
+            elif not node['data_buffer']:
+                # 无上报的闲置开销
+                node['energy'] -= (self.energy_model.cpu_energy(self.config.idle_cpu_time_s) +
+                                   self.energy_model.lpm_energy(self.config.idle_lpm_time_s))
+                total_energy_consumed += (self.energy_model.cpu_energy(self.config.idle_cpu_time_s) +
+                                          self.energy_model.lpm_energy(self.config.idle_lpm_time_s))
+
+        # 2) 簇头 -> 基站（或多跳经ACO路由）
+        for ch_id, node in self.nodes.items():
+            if not node['is_alive'] or not node['is_cluster_head']:
+                continue
+            if not node['data_buffer']:
+                continue
+
+            route = self.routing_paths.get(ch_id)
+            if route and len(route) >= 1:
+                # route 是实际节点ID路径，以-1表示基站
+                current = ch_id
+                for nxt in route:
+                    if nxt == current:
+                        continue
+                    if nxt == -1:
+                        # 发送到基站
+                        d = self._calculate_distance(self.nodes[current]['position'], self.config.base_station_pos)
+                        tx = self.energy_model.radio_tx_energy(self.config.payload_bits, d)
+                        self.nodes[current]['energy'] -= (tx + self.energy_model.cpu_energy(self.config.idle_cpu_time_s))
+                        total_energy_consumed += (tx + self.energy_model.cpu_energy(self.config.idle_cpu_time_s))
+                        break
+                    else:
+                        # 中继CH之间传输：current -> nxt（TX/RX）
+                        if not self.nodes[nxt]['is_alive']:
+                            continue
+                        d = self._calculate_distance(self.nodes[current]['position'], self.nodes[nxt]['position'])
+                        tx = self.energy_model.radio_tx_energy(self.config.payload_bits, d)
+                        rx = self.energy_model.radio_rx_energy(self.config.payload_bits)
+                        self.nodes[current]['energy'] -= (tx + self.energy_model.cpu_energy(self.config.idle_cpu_time_s))
+                        self.nodes[nxt]['energy'] -= (rx + self.energy_model.cpu_energy(self.config.idle_cpu_time_s))
+                        total_energy_consumed += (tx + rx + 2 * self.energy_model.cpu_energy(self.config.idle_cpu_time_s))
+                        current = nxt
+            else:
+                # 无路由：直接到基站
+                d = self._calculate_distance(node['position'], self.config.base_station_pos)
+                tx = self.energy_model.radio_tx_energy(self.config.payload_bits, d)
+                node['energy'] -= (tx + self.energy_model.cpu_energy(self.config.idle_cpu_time_s))
+                total_energy_consumed += (tx + self.energy_model.cpu_energy(self.config.idle_cpu_time_s))
+
+        # 3) 死亡检测与清空缓冲
+        for node in self.nodes.values():
             if node['energy'] <= 0:
                 node['is_alive'] = False
-                node['energy'] = 0
-            
-            # 清空数据缓冲区
+                node['energy'] = 0.0
             node['data_buffer'] = []
-        
+
         return total_energy_consumed
     
     def _find_nearest_cluster_head(self, node_id: int) -> Optional[int]:
