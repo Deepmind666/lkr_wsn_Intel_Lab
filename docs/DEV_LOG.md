@@ -33,4 +33,22 @@ WSN-Intel-Lab-Project — 开发变更记录
 - 新文件：`experiments/sod_ablation.py`
 - 作用：对比 SoD 开/关对能耗、最终存活、平均触发率的影响；输出 JSON 与图表到 `experiments/results/`。
 
+6) 消融运行记录（自动化）
+- 运行时间：2025-08-09 23:38:08（本地时区）
+- 结果文件：
+  - JSON：`experiments/results/data/sod_ablation_20250809_233808.json`
+  - 图像：`experiments/results/figures/sod_ablation_20250809_233808.png`
+- 关键指标（60 轮，30 节点）：
+  - SoD Off：总能耗 0.017277、平均触发率 1.000、最终存活 30
+  - SoD On ：总能耗 0.003200、平均触发率 0.177、最终存活 30
+  - 能耗差（Off-On）：≈ 0.014077（演示级别单位）
+- 说明：当前能耗为演示级模型（“任意单位”），仅验证 SoD 降报文→降能耗的逻辑趋势；非论文级定标。
+
+7) 实验脚本增强
+- 为 `experiments/sod_ablation.py` 增加每轮序列导出与高质量图（能耗/存活/SoD 比率曲线），便于论文图表复用。
+ - 新增 `experiments/sod_report.py`：
+   - 生成 `experiments/results/data/sod_ablation_summary_latest.csv`
+   - 生成 `experiments/results/data/{sod_off,sod_on}_per_round_latest.csv`
+   - 生成 `experiments/results/figures/sod_ablation_summary_latest.png`
+
 

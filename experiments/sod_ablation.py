@@ -22,6 +22,12 @@ from typing import Dict, Any
 import numpy as np
 import matplotlib.pyplot as plt
 
+# 确保项目根目录在 sys.path，便于以 "src.*" 方式导入
+import sys
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 from src.enhanced_eehfr_system import EnhancedEEHFRSystem, SystemConfig
 
 
@@ -47,6 +53,19 @@ def run_once(sod_enabled: bool, rounds: int = 60, num_nodes: int = 30) -> Dict[s
     # 也保留最后一轮完整指标
     final_metrics = asdict(history[-1]["performance"]) if history else {}
 
+    # 导出每轮序列（便于论文图表）
+    per_round = []
+    for h in history:
+        perf = asdict(h["performance"]) if hasattr(h["performance"], "__dict__") else h["performance"].__dict__
+        per_round.append({
+            "round": h["round"],
+            "alive_nodes": h["alive_nodes"],
+            "energy_consumed": h["energy_consumed"],
+            "sod_trigger_ratio": perf.get("sod_trigger_ratio", 1.0),
+            "energy_efficiency": perf.get("energy_efficiency", 0.0),
+            "avg_trust": perf.get("average_trust_value", 0.0),
+        })
+
     return {
         "config": {
             "sod_enabled": sod_enabled,
@@ -59,6 +78,7 @@ def run_once(sod_enabled: bool, rounds: int = 60, num_nodes: int = 30) -> Dict[s
             "final_alive_nodes": final_alive,
         },
         "final_metrics": final_metrics,
+        "per_round": per_round,
     }
 
 
@@ -100,7 +120,7 @@ def main():
     plt.savefig(fig_path, dpi=200, bbox_inches="tight")
     plt.close()
 
-    print(f"✅ SoD 消融结果已保存：\n- JSON: {json_path}\n- FIG : {fig_path}")
+    print(f"SoD 消融结果已保存:\n- JSON: {json_path}\n- FIG : {fig_path}")
 
 
 if __name__ == "__main__":
