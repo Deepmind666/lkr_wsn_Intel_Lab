@@ -64,9 +64,16 @@ def run_once(sod_enabled: bool, rounds: int = 60, num_nodes: int = 30) -> Dict[s
             "round": h["round"],
             "alive_nodes": h["alive_nodes"],
             "energy_consumed": h["energy_consumed"],
+            "cum_energy": float(np.sum([x["energy_consumed"] for x in history if x["round"] <= h["round"]])),
             "sod_trigger_ratio": perf.get("sod_trigger_ratio", 1.0),
             "energy_efficiency": perf.get("energy_efficiency", 0.0),
             "avg_trust": perf.get("average_trust_value", 0.0),
+            "pdr": perf.get("packet_delivery_ratio", 0.0),
+            "delay": perf.get("average_delay", 0.0),
+            "routing_overhead": perf.get("routing_overhead", 0.0),
+            "fnd": perf.get("first_node_death", 0) or None,
+            "hnd": perf.get("half_nodes_death", 0) or None,
+            "lnd": perf.get("network_lifetime", 0) or None,
         })
 
     return {

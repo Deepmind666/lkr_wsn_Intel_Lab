@@ -91,6 +91,7 @@ class PerformanceMetrics:
     total_energy_consumption: float = 0.0
     average_energy_consumption: float = 0.0
     energy_efficiency: float = 0.0
+    cumulative_energy: float = 0.0
     
     # 网络生存时间
     first_node_death: int = 0
@@ -150,6 +151,7 @@ class EnhancedEEHFRSystem:
         self.routing_paths = {}
         self.performance_history = []
         self.current_round = 0
+        self.cumulative_energy = 0.0
         
         # 数据存储
         self.sensor_data = []
@@ -159,6 +161,7 @@ class EnhancedEEHFRSystem:
         # SoD 控制器（按节点管理）
         self.sod_controllers: Dict[int, SoDController] = {}
         self.sod_stats = {"candidates": 0, "sent": 0}
+        self.lifetime_markers = {"fnd": None, "hnd": None, "lnd": None}
         
         print("Enhanced EEHFR WSN System 初始化完成")
     
@@ -529,15 +532,17 @@ class EnhancedEEHFRSystem:
         metrics.average_energy_consumption = total_consumed_energy / self.config.num_nodes
         metrics.energy_efficiency = total_remaining_energy / (self.config.num_nodes * self.config.initial_energy)
         
-        # 网络生存时间
-        if len(dead_nodes) > 0 and metrics.first_node_death == 0:
-            metrics.first_node_death = round_num
-        
-        if len(dead_nodes) >= self.config.num_nodes // 2 and metrics.half_nodes_death == 0:
-            metrics.half_nodes_death = round_num
-        
-        if len(alive_nodes) == 0:
-            metrics.network_lifetime = round_num
+        # 网络生存时间（持久标记）
+        if self.lifetime_markers["fnd"] is None and len(dead_nodes) >= 1:
+            self.lifetime_markers["fnd"] = round_num
+        if self.lifetime_markers["hnd"] is None and len(dead_nodes) >= (self.config.num_nodes // 2):
+            self.lifetime_markers["hnd"] = round_num
+        if self.lifetime_markers["lnd"] is None and len(alive_nodes) == 0:
+            self.lifetime_markers["lnd"] = round_num
+
+        metrics.first_node_death = self.lifetime_markers["fnd"] or 0
+        metrics.half_nodes_death = self.lifetime_markers["hnd"] or 0
+        metrics.network_lifetime = self.lifetime_markers["lnd"] or 0
         
         # 信任指标
         if self.trust_evaluator.trust_values:
@@ -602,9 +607,11 @@ class EnhancedEEHFRSystem:
             
             # 模拟数据传输
             energy_consumed = self.simulate_data_transmission(round_num)
-            
+            self.cumulative_energy += energy_consumed
+
             # 评估性能
             performance = self.evaluate_performance(round_num)
+            performance.cumulative_energy = self.cumulative_energy
             self.performance_history.append({
                 'round': round_num,
                 'performance': performance,

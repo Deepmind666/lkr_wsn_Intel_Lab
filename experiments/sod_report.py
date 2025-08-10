@@ -45,18 +45,30 @@ def main():
         if not pr.empty:
             pr.to_csv(data_dir / f'{key}_per_round_latest.csv', index=False)
             # 画曲线
-            fig, axes = plt.subplots(3, 1, figsize=(10, 10), sharex=True)
-            axes[0].plot(pr['round'], pr['energy_consumed'], label='Energy per round')
-            axes[0].set_ylabel('Energy')
+            fig, axes = plt.subplots(4, 1, figsize=(10, 12), sharex=True)
+            axes[0].plot(pr['round'], pr['cum_energy'], label='Cumulative Energy')
+            axes[0].set_ylabel('Cum Energy')
             axes[0].grid(True, alpha=0.3)
-            axes[1].plot(pr['round'], pr['alive_nodes'], label='Alive nodes', color='tab:green')
-            axes[1].set_ylabel('Alive')
+            axes[1].plot(pr['round'], pr['energy_consumed'], label='Energy per round')
+            axes[1].set_ylabel('Energy/round')
             axes[1].grid(True, alpha=0.3)
-            axes[2].plot(pr['round'], pr['sod_trigger_ratio'], label='SoD ratio', color='tab:orange')
-            axes[2].set_ylabel('SoD ratio')
-            axes[2].set_xlabel('Round')
-            axes[2].set_ylim(0, 1)
+            axes[2].plot(pr['round'], pr['alive_nodes'], label='Alive nodes', color='tab:green')
+            axes[2].set_ylabel('Alive')
             axes[2].grid(True, alpha=0.3)
+            axes[3].plot(pr['round'], pr['sod_trigger_ratio'], label='SoD ratio', color='tab:orange')
+            axes[3].set_ylabel('SoD ratio')
+            axes[3].set_xlabel('Round')
+            axes[3].set_ylim(0, 1)
+            axes[3].grid(True, alpha=0.3)
+
+            # 叠加FND/HND/LND竖线（如可推断）
+            for marker_name in ['FND', 'HND', 'LND']:
+                col = marker_name.lower()
+                if col in pr.columns and pr[col].notna().any():
+                    r = int(pr[col].dropna().iloc[0])
+                    for ax in axes:
+                        ax.axvline(r, color='red', linestyle='--', alpha=0.3)
+                        ax.text(r, ax.get_ylim()[1]*0.9, marker_name, color='red', fontsize=8)
             plt.tight_layout()
             plt.savefig(fig_dir / f'{key}_per_round_latest.png', dpi=300, bbox_inches='tight')
             plt.close()
