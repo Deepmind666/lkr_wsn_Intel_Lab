@@ -27,12 +27,19 @@ from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
 
+# 确保本地模块可导入（将 src 目录加入 sys.path）
+import sys
+CURRENT_DIR = Path(__file__).parent
+if str(CURRENT_DIR) not in sys.path:
+    sys.path.insert(0, str(CURRENT_DIR))
+
 # 导入所有核心模块
 from fuzzy_logic_cluster import FuzzyLogicClusterHead
 from pso_optimizer import PSOOptimizer
 from aco_router import ACORouter
 from lstm_predictor import WSNLSTMSystem
-from trust_evaluator import TrustEvaluator, TrustMetrics
+from trust_evaluator import TrustEvaluator, TrustMetrics, TrustType
+from src.metrics.energy_model import EnergyModelConfig
 from src.utils.sod import SoDController, SoDConfig
 
 @dataclass
@@ -63,6 +70,12 @@ class SystemConfig:
     # 实验参数
     simulation_rounds: int = 100                # 仿真轮数
     data_collection_interval: int = 5           # 数据收集间隔
+    # 组件开关
+    enable_lstm: bool = False                   # 缺省关闭，避免重型依赖影响快速实验
+    # 能耗/寿命
+    payload_bits: int = 1024                     # 每报文比特数
+    idle_cpu_time_s: float = 0.001               # 每轮非发送时的CPU活跃时间（近似）
+    idle_lpm_time_s: float = 0.004               # 每轮低功耗时间（近似）
     # SoD 参数
     sod_enabled: bool = True
     sod_mode: str = "adaptive"                 # "fixed" | "adaptive"
@@ -115,12 +128,12 @@ class EnhancedEEHFRSystem:
         # 初始化核心模块
         self.fuzzy_cluster = FuzzyLogicClusterHead()
         self.pso_optimizer = PSOOptimizer(
-            num_particles=20,
-            max_iterations=self.config.pso_iterations
+            n_particles=20,
+            n_iterations=self.config.pso_iterations
         )
         self.aco_router = ACORouter(
-            num_ants=15,
-            max_iterations=self.config.aco_iterations
+            n_ants=15,
+            n_iterations=self.config.aco_iterations
         )
         self.lstm_system = WSNLSTMSystem()
         self.trust_evaluator = TrustEvaluator(
@@ -128,6 +141,7 @@ class EnhancedEEHFRSystem:
             beta=self.config.trust_beta,
             gamma=self.config.trust_gamma
         )
+        self.energy_model = EnergyModelConfig()
         
         # 系统状态
         self.nodes = {}
@@ -276,31 +290,23 @@ class EnhancedEEHFRSystem:
             print("存活节点不足，跳过簇头选择")
             return
         
-        # 计算节点特征
-        node_features = {}
+        # 计算节点特征（与模糊模块接口对齐）
+        max_dist = float(np.sqrt(self.config.network_size[0] ** 2 + self.config.network_size[1] ** 2))
+        records = []
         for node_id, node in alive_nodes.items():
-            # 计算到基站的距离
-            dist_to_bs = self._calculate_distance(
-                node['position'], 
-                self.config.base_station_pos
-            )
-            
-            # 计算邻居数量
-            neighbor_count = len([n for n in self.network_topology[node_id] 
-                                if self.nodes[n]['is_alive']])
-            
-            node_features[node_id] = {
-                'energy': node['energy'],
-                'distance_to_bs': dist_to_bs,
-                'neighbor_count': neighbor_count,
-                'trust_score': node['trust_score']
-            }
-        
-        # 执行模糊逻辑簇头选择
-        cluster_heads = self.fuzzy_cluster.select_cluster_heads(
-            node_features, 
-            target_cluster_ratio=0.1
-        )
+            dist_to_bs = self._calculate_distance(node['position'], self.config.base_station_pos)
+            neighbor_count = len([n for n in self.network_topology[node_id] if self.nodes[n]['is_alive']])
+            records.append({
+                'node_id': node_id,
+                'energy_ratio': float(np.clip(node['energy'] / max(1e-9, self.config.initial_energy), 0.0, 1.0)),
+                'distance_ratio': float(np.clip(dist_to_bs / max(1e-9, max_dist), 0.0, 1.0)),
+                'neighbor_count': int(neighbor_count),
+            })
+
+        import pandas as pd  # 局部导入以避免顶层依赖
+        nodes_df = pd.DataFrame.from_records(records)
+        n_clusters = max(1, int(0.1 * len(alive_nodes)))
+        cluster_heads = self.fuzzy_cluster.select_cluster_heads(nodes_df, n_clusters=n_clusters)
         
         # 更新节点状态
         for node_id in self.nodes:
@@ -317,20 +323,21 @@ class EnhancedEEHFRSystem:
             print("没有簇头节点，跳过PSO优化")
             return
         
-        # 准备优化数据
-        alive_nodes = [nid for nid, node in self.nodes.items() if node['is_alive']]
-        node_positions = [self.nodes[nid]['position'] for nid in alive_nodes]
-        node_energies = [self.nodes[nid]['energy'] for nid in alive_nodes]
-        
-        # 执行PSO优化
-        best_solution, best_fitness = self.pso_optimizer.optimize_cluster_heads(
-            node_positions=node_positions,
-            node_energies=node_energies,
-            base_station_pos=self.config.base_station_pos,
-            num_clusters=len(self.cluster_heads)
+        # 准备优化数据（与PSO接口对齐）
+        alive_node_ids = [nid for nid, node in self.nodes.items() if node['is_alive']]
+        nodes_data = np.column_stack([
+            [self.nodes[nid]['position'][0] for nid in alive_node_ids],
+            [self.nodes[nid]['position'][1] for nid in alive_node_ids],
+            [self.nodes[nid]['energy'] for nid in alive_node_ids],
+        ])
+
+        optimal_idx, best_fitness = self.pso_optimizer.optimize_cluster_heads(
+            nodes_data=nodes_data,
+            n_clusters=max(1, len(self.cluster_heads))
         )
-        
-        print(f"PSO优化完成，最佳适应度: {best_fitness:.4f}")
+        optimal_heads = [alive_node_ids[int(i)] for i in optimal_idx]
+        self.cluster_heads = list(optimal_heads)
+        print(f"PSO优化完成，最佳适应度: {best_fitness:.4f}，簇头: {self.cluster_heads}")
     
     def run_aco_routing(self, round_num: int):
         """运行ACO路由优化"""
@@ -340,62 +347,66 @@ class EnhancedEEHFRSystem:
             print("没有簇头节点，跳过ACO路由")
             return
         
-        # 为每个簇头找到最优路由
-        for ch_id in self.cluster_heads:
-            if not self.nodes[ch_id]['is_alive']:
+        # 构建ACO输入（按接口）
+        ch_ids = [nid for nid in self.cluster_heads if self.nodes[nid]['is_alive']]
+        if not ch_ids:
+            print("簇头全灭，跳过ACO路由")
+            return
+
+        positions = np.vstack([
+            np.array([self.nodes[nid]['position'][0], self.nodes[nid]['position'][1]]) for nid in ch_ids
+        ] + [np.array([self.config.base_station_pos[0], self.config.base_station_pos[1]])])
+        energies = np.array([self.nodes[nid]['energy'] for nid in ch_ids] + [1.0])
+        trusts = np.array([self.nodes[nid]['trust_score'] for nid in ch_ids] + [1.0])
+
+        routes, stats = self.aco_router.find_optimal_routes(
+            cluster_heads=ch_ids,
+            base_station_id=-1,
+            nodes_positions=positions,
+            nodes_energy=energies,
+            nodes_trust=trusts,
+        )
+
+        # 映射回实际节点ID路径
+        self.routing_paths = {}
+        for i, route in enumerate(routes):
+            if not route.path:
                 continue
-            
-            # 构建路由节点列表（簇头 + 基站）
-            route_nodes = self.cluster_heads + [-1]  # -1代表基站
-            node_positions = []
-            
-            for node_id in route_nodes[:-1]:
-                node_positions.append(self.nodes[node_id]['position'])
-            node_positions.append(self.config.base_station_pos)  # 基站位置
-            
-            # 执行ACO路由优化
-            if len(node_positions) >= 2:
-                best_route = self.aco_router.find_optimal_route(
-                    start_node=0,  # 相对索引
-                    end_node=len(node_positions)-1,  # 基站索引
-                    node_positions=node_positions
-                )
-                
-                # 转换回实际节点ID
-                actual_route = []
-                for idx in best_route.path:
-                    if idx < len(route_nodes) - 1:
-                        actual_route.append(route_nodes[idx])
-                    else:
-                        actual_route.append(-1)  # 基站
-                
-                self.routing_paths[ch_id] = actual_route
-        
+            mapped = []
+            for idx in route.path:
+                if idx < len(ch_ids):
+                    mapped.append(ch_ids[idx])
+                else:
+                    mapped.append(-1)  # 基站
+            self.routing_paths[ch_ids[i]] = mapped
+
         print(f"ACO路由优化完成，生成{len(self.routing_paths)}条路由")
     
     def run_lstm_prediction(self, round_num: int):
         """运行LSTM预测"""
+        if not self.config.enable_lstm:
+            return
         if round_num < self.config.lstm_sequence_length:
             return  # 数据不足，跳过预测
         
         print(f"第{round_num}轮：执行LSTM预测...")
         
-        # 准备LSTM训练数据
-        if len(self.sensor_data) >= 100:  # 有足够数据时才训练
-            df = pd.DataFrame(self.sensor_data)
-            
-            # 训练LSTM模型
-            self.lstm_system.prepare_data(df)
-            training_results = self.lstm_system.train_model(
-                epochs=10,
-                batch_size=16,
-                validation_split=0.2
-            )
-            
-            # 进行预测
-            predictions = self.lstm_system.predict_future(steps=5)
-            
-            print(f"LSTM预测完成，MAE: {training_results['mae']:.4f}")
+        # 准备LSTM训练数据（安全降级，缺省较轻）
+        try:
+            if len(self.sensor_data) >= 200:
+                import pandas as pd  # 局部导入
+                df = pd.DataFrame(self.sensor_data)
+                feature_columns = ['temperature', 'humidity', 'light', 'energy']
+                loaders = self.lstm_system.prepare_data(
+                    df, feature_columns, batch_size=64
+                )
+                train_loader, val_loader, test_loader = loaders
+                self.lstm_system.build_model(input_size=len(feature_columns), hidden_size=32, num_layers=2)
+                training_stats = self.lstm_system.train_model(train_loader, val_loader, epochs=5)
+                _ = self.lstm_system.evaluate_model(test_loader)
+                print(f"LSTM训练完成（轻量），最佳验证损失: {training_stats['best_val_loss']:.6f}")
+        except Exception as e:
+            print(f"LSTM阶段跳过（原因: {e}）")
     
     def update_trust_scores(self, round_num: int):
         """更新信任分数"""
@@ -429,25 +440,32 @@ class EnhancedEEHFRSystem:
             )
             
             # 更新节点信任分数
-            node['trust_score'] = self.trust_evaluator.trust_values[node_id]['composite_trust']
+            node['trust_score'] = float(self.trust_evaluator.calculate_composite_trust(node_id))
     
     def simulate_data_transmission(self, round_num: int):
         """模拟数据传输和能耗"""
-        total_energy_consumed = 0
+        total_energy_consumed = 0.0
         
         for node_id, node in self.nodes.items():
             if not node['is_alive'] or not node['data_buffer']:
+                # 无上报也有MCU能耗
+                node['energy'] -= self.energy_model.cpu_energy(self.config.idle_cpu_time_s)
+                node['energy'] -= self.energy_model.lpm_energy(self.config.idle_lpm_time_s)
+                if node['energy'] <= 0:
+                    node['is_alive'] = False
+                    node['energy'] = 0.0
                 continue
             
-            # 计算传输能耗
+            # 计算传输能耗（radio tx + mcu）
             if node['is_cluster_head']:
                 # 簇头节点：收集数据 + 转发到基站
                 transmission_distance = self._calculate_distance(
                     node['position'], 
                     self.config.base_station_pos
                 )
-                energy_cost = (self.config.transmission_energy * 1000 + 
-                             self.config.amplification_energy * transmission_distance**2)
+                tx = self.energy_model.radio_tx_energy(self.config.payload_bits, transmission_distance)
+                rx = 0.0
+                energy_cost = tx + self.energy_model.cpu_energy(self.config.idle_cpu_time_s)
             else:
                 # 普通节点：发送到簇头
                 cluster_head = self._find_nearest_cluster_head(node_id)
@@ -456,10 +474,10 @@ class EnhancedEEHFRSystem:
                         node['position'], 
                         self.nodes[cluster_head]['position']
                     )
-                    energy_cost = (self.config.transmission_energy * 100 + 
-                                 self.config.amplification_energy * transmission_distance**2)
+                    tx = self.energy_model.radio_tx_energy(self.config.payload_bits, transmission_distance)
+                    energy_cost = tx + self.energy_model.cpu_energy(self.config.idle_cpu_time_s)
                 else:
-                    energy_cost = 0
+                    energy_cost = self.energy_model.cpu_energy(self.config.idle_cpu_time_s)
             
             # 更新节点能量
             node['energy'] -= energy_cost
@@ -523,8 +541,17 @@ class EnhancedEEHFRSystem:
         
         # 信任指标
         if self.trust_evaluator.trust_values:
-            trust_values = [tv['composite_trust'] for tv in self.trust_evaluator.trust_values.values()]
-            metrics.average_trust_value = np.mean(trust_values)
+            trust_values = []
+            for node_id in self.trust_evaluator.trust_values.keys():
+                tv = self.trust_evaluator.trust_values[node_id]
+                # 兼容：键可能是枚举
+                val = tv.get(TrustType.COMPOSITE_TRUST)
+                if val is None and isinstance(next(iter(tv.keys())), str):
+                    val = tv.get('composite_trust')
+                if val is None:
+                    val = self.trust_evaluator.calculate_composite_trust(node_id)
+                trust_values.append(float(val))
+            metrics.average_trust_value = float(np.mean(trust_values)) if trust_values else 0.0
         
         # 模拟其他指标
         metrics.packet_delivery_ratio = np.random.uniform(0.85, 0.98)

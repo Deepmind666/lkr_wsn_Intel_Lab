@@ -41,6 +41,9 @@ def run_once(sod_enabled: bool, rounds: int = 60, num_nodes: int = 30) -> Dict[s
         sod_window=24,
         sod_delta_day=0.5,
         sod_delta_night=0.2,
+        payload_bits=1024,
+        idle_cpu_time_s=0.001,
+        idle_lpm_time_s=0.004,
     )
     system = EnhancedEEHFRSystem(cfg)
     history = system.run_simulation()
