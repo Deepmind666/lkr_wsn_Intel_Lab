@@ -11,6 +11,7 @@
 - 快速开始（安装/运行）
 - 核心目录结构
 - 论文级可视化与“论文模式”
+- 论文图表索引与复现命令
 - 数据集与引用
 - 故障排除
 - 贡献与许可
@@ -77,6 +78,39 @@ python -m augment.plots.make_figures --overview --paper-mode
 - 输出位置：`results/figures/`（包含 `attacks_pdr.*`、`attacks_delay.*`、`attacks_txrx.*`）
 
 > 说明：论文模式默认与表格/正文一致的场景集合与排序，导出 SVG+PDF，便于投稿与后续编辑。
+
+## 论文图表索引与复现命令
+- 主图（多面板，真实数据）：
+  - 总览多面板：`augment/results/real/figures/real_overview_paper.(svg|pdf|png)`（由 `augment/plots/plot_real_paper.py` 生成）
+  - 电子能耗多面板：`augment/results/real/figures/real_overview_paper_elec.(pdf|png)`（由 `augment/plots/plot_real_paper_elec.py` 生成）
+- 补充图（出版级样式，SVG/PNG/PDF 三种格式）：
+  - ELEC/AMP 热力图（PDR、CTRL%）：
+    - ELEC：`augment/results/real/sweep/elec/figs_pub/*heatmap*.(svg|png|pdf)`
+    - AMP：`augment/results/real/sweep/amp/figs_pub/*heatmap*.(svg|png|pdf)`
+  - 敏感性折线（PDR/CTRL/DELAY）：
+    - `augment/results/real/sens/figs_pub/*(pdr|ctrl|delay)*.(svg|png|pdf)`
+
+- 一键复现实验与图表（推荐）：
+```bash
+# 运行完整论文流水线：显著性检验、多面板主图、ELEC/AMP 热力图、敏感性折线、简单汇总柱状图
+python -m augment.plots.make_figures --pipeline
+
+# 可选：跳过某些阶段
+python -m augment.plots.make_figures --pipeline --no-heatmaps        # 跳过热力图
+python -m augment.plots.make_figures --pipeline --no-sens            # 跳过敏感性折线
+python -m augment.plots.make_figures --pipeline --no-paper-e/--no-paper  # 跳过电子能耗/主多面板
+```
+
+- 单独生成补充图：
+```bash
+# ELEC/AMP 热力图（自动定位数据路径，输出至各自 figs_pub）
+python -m augment.plots.heatmaps_real_sweep --root C:/WSN-Intel-Lab-Project
+
+# 敏感性折线：同时生成 ELEC+AMP 三指标，严格 QC，输出至 sens/figs_pub
+python -m augment.plots.sens_lines --mode both --metric all --qc --qc-strict
+```
+
+> 说明：脚本内部已切换非交互式后端并统一导出参数，避免无头环境报错与边界裁剪问题；SVG/PDF 可直接用于论文与矢量后期编辑。
 
 ## 数据集与引用
 - Intel Berkeley Lab 数据集（54节点，温/湿/光/电，≈31s）：
