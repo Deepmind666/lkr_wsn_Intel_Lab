@@ -98,7 +98,7 @@ python -m augment.plots.make_figures --pipeline
 # 可选：跳过某些阶段
 python -m augment.plots.make_figures --pipeline --no-heatmaps        # 跳过热力图
 python -m augment.plots.make_figures --pipeline --no-sens            # 跳过敏感性折线
-python -m augment.plots.make_figures --pipeline --no-paper-e/--no-paper  # 跳过电子能耗/主多面板
+python -m augment.plots.make_figures --pipeline --no-paper-elec/--no-paper  # 跳过电子能耗/主多面板
 ```
 
 - 单独生成补充图：
