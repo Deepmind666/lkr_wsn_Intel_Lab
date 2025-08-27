@@ -1,8 +1,9 @@
 import argparse
 from pathlib import Path
 import json
-import matplotlib.pyplot as plt
 import matplotlib as mpl
+mpl.use('Agg')
+import matplotlib.pyplot as plt
 
 PROTOS = ['greedy','leach','heed','etx','trusthr']
 LABELS = {'greedy':'Greedy','leach':'LEACH','heed':'HEED','etx':'ETX','trusthr':'TrustHR'}
@@ -40,31 +41,43 @@ def main():
 
     # PDR
     ax = axes[0]
-    ax.bar(range(len(xs)), pdr, color=cs)
-    ax.set_xticks(range(len(xs)), xs, rotation=15, ha='right')
+    ax.bar(range(len(xs)), pdr, color=cs, edgecolor='black', linewidth=0.6)
+    ax.set_xticks(range(len(xs)), xs)
+    for lbl in ax.get_xticklabels():
+        lbl.set_rotation(15)
+        lbl.set_ha('right')
     ax.set_ylabel('Expected PDR')
     ax.set_title('PDR (Real Dataset)')
     ax.grid(True, axis='y', alpha=0.3)
+    ax.margins(y=0.08)
 
     # Delay
     ax = axes[1]
-    ax.bar(range(len(xs)), delay, color=cs)
-    ax.set_xticks(range(len(xs)), xs, rotation=15, ha='right')
+    ax.bar(range(len(xs)), delay, color=cs, edgecolor='black', linewidth=0.6)
+    ax.set_xticks(range(len(xs)), xs)
+    for lbl in ax.get_xticklabels():
+        lbl.set_rotation(15)
+        lbl.set_ha('right')
     ax.set_ylabel('Avg E2E Delay (s)')
     ax.set_title('Latency')
     ax.grid(True, axis='y', alpha=0.3)
+    ax.margins(y=0.08)
 
     # Electronics-only energy (TX+RX)
     ax = axes[2]
-    ax.bar(range(len(xs)), energy, color=cs)
-    ax.set_xticks(range(len(xs)), xs, rotation=15, ha='right')
+    ax.bar(range(len(xs)), energy, color=cs, edgecolor='black', linewidth=0.6)
+    ax.set_xticks(range(len(xs)), xs)
+    for lbl in ax.get_xticklabels():
+        lbl.set_rotation(15)
+        lbl.set_ha('right')
     ax.set_ylabel('Data-plane Electronics Energy (J)')
     ax.set_title('Energy (TX+RX, Electronics)')
     ax.grid(True, axis='y', alpha=0.3)
+    ax.margins(y=0.08)
 
-    fig.tight_layout()
-    fig.savefig(args.out_png, dpi=300)
-    fig.savefig(args.out_pdf)
+    fig.tight_layout(rect=(0,0,1,1))
+    fig.savefig(args.out_png, dpi=400, bbox_inches='tight')
+    fig.savefig(args.out_pdf, bbox_inches='tight')
     print(f'Saved {args.out_png} and {args.out_pdf}')
 
 
