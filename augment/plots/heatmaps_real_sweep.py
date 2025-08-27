@@ -8,6 +8,14 @@ import argparse
 from pathlib import Path
 import pandas as pd
 import numpy as np
+import os
+import matplotlib
+# 使用非交互式后端，避免无 Tcl/Tk 环境报错
+if os.environ.get('MPLBACKEND') is None:
+    try:
+        matplotlib.use('Agg', force=True)
+    except Exception:
+        pass
 import matplotlib.pyplot as plt
 import seaborn as sns
 
