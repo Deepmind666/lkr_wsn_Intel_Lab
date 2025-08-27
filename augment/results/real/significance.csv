@@ -1,0 +1,13 @@
+vs,metric,U,p_value
+greedy,pdr_exp,1096.50,0.09669
+greedy,delay_s,963.00,0.002674
+greedy,txrx_data,1018.50,0.03014
+greedy,total_energy,1018.50,0.03014
+leach,pdr_exp,277.00,2.771e-12
+leach,delay_s,349.50,3.538e-12
+leach,txrx_data,365.50,1.422e-10
+leach,total_energy,366.50,1.484e-10
+heed,pdr_exp,549.00,1.784e-07
+heed,delay_s,487.00,1.191e-09
+heed,txrx_data,512.00,4.731e-08
+heed,total_energy,514.00,5.09e-08

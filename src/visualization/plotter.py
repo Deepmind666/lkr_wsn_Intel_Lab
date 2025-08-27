@@ -18,7 +18,7 @@ def plot_results(result_file, figures_dir):
         figures_dir (str): 保存图表的目录
     """
     # 加载结果
-    with open(result_file, 'r') as f:
+    with open(result_file, 'r', encoding='utf-8') as f:
         results = json.load(f)
 
     # 生成时间戳

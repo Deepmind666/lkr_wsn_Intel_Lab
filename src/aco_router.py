@@ -245,7 +245,7 @@ class ACORouter:
             (最优路由列表, 优化统计信息)
         """
         
-        print(f"🔄 启动ACO路由优化 - 蚂蚁数: {self.n_ants}, 迭代数: {self.n_iterations}")
+        print(f"启动ACO路由优化 - 蚂蚁数: {self.n_ants}, 迭代数: {self.n_iterations}")
         
         # 构建完整的节点列表
         all_nodes = cluster_heads + [base_station_id]
@@ -325,7 +325,7 @@ class ACORouter:
             }
         }
         
-        print(f"✅ ACO路由优化完成 - 最优成本: {stats['best_cost']:.4f}")
+        print(f"ACO路由优化完成 - 最优成本: {stats['best_cost']:.4f}")
         print(f"   优化时间: {optimization_time:.2f}秒")
         
         return best_routes, stats
@@ -414,7 +414,7 @@ class ACORouter:
         
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
-            print(f"✅ ACO路由图表已保存到: {save_path}")
+            print(f"ACO路由图表已保存到: {save_path}")
         
         return fig
     
@@ -460,7 +460,7 @@ class ACORouter:
         with open(save_path, 'w', encoding='utf-8') as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
         
-        print(f"✅ ACO路由结果已保存到: {save_path}")
+        print(f"ACO路由结果已保存到: {save_path}")
 
 if __name__ == "__main__":
     # 测试ACO路由器

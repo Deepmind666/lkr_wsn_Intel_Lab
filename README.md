@@ -48,10 +48,16 @@ git clone [repository-url]
 pip install -r requirements.txt
 
 # 下载数据集
-python src/utils/download_dataset.py
+python main.py download
 
-# 运行仿真
-python src/simulation/run_simulation.py
+# 预处理数据
+python main.py preprocess
+
+# 运行实验（默认：路由对比 ACO vs Baseline + SoD on/off）
+python main.py experiment --experiment routing_comparison
+
+# 可视化最近一次结果
+python main.py visualize
 ```
 
 ## 贡献指南
@@ -60,4 +66,4 @@ python src/simulation/run_simulation.py
 
 ## 许可证
 
-本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件。"# lkr_wsn_Intel_Lab" 
+本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件。

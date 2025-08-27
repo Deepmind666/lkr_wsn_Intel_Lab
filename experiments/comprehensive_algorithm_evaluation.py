@@ -42,21 +42,31 @@ class NumpyJSONEncoder(json.JSONEncoder):
             return float(obj)
         elif isinstance(obj, np.ndarray):
             return obj.tolist()
+        elif hasattr(obj, '__dict__'):
+            # 处理自定义对象（如ChainTopology）
+            return obj.__dict__
+        elif hasattr(obj, '_asdict'):
+            # 处理namedtuple
+            return obj._asdict()
         return super(NumpyJSONEncoder, self).default(obj)
 
 # 导入三个核心算法
 from advanced_algorithms.afw_rl_algorithm import AFWRLAlgorithm
-from advanced_algorithms.gnn_cto_algorithm import GNNCTOAlgorithm  
+# 可选导入 GNN-CTO（依赖 torch_geometric），失败则降级跳过
+try:
+    from advanced_algorithms.gnn_cto_algorithm import GNNCTOAlgorithm  # type: ignore
+    _HAS_GNN = True
+    _GNN_IMPORT_ERROR = None
+except Exception as _e:  # noqa: N816
+    _HAS_GNN = False
+    _GNN_IMPORT_ERROR = str(_e)
 from advanced_algorithms.ilmr_algorithm import ILMRAlgorithm
-from enhanced_eehfr_wsn_system import EnhancedEEHFRSystem, SystemConfig
-
-# 导入基准算法
-from enhanced_eehfr_wsn_system import EnhancedEEHFRSystem
+from src.enhanced_eehfr_system import EnhancedEEHFRSystem, SystemConfig
 
 class ComprehensiveEvaluator:
     """综合算法评估器"""
     
-    def __init__(self, network_size: int = 100, area_size: Tuple[int, int] = (200, 200)):
+    def __init__(self, network_size: int = 54, area_size: Tuple[int, int] = (25, 25)):
         self.network_size = network_size
         self.area_size = area_size
         self.results = {}
@@ -73,11 +83,11 @@ class ComprehensiveEvaluator:
             'explainability'
         ]
         
-        # 实验配置
+        # 实验配置（基于Intel Lab真实环境）
         self.experiment_configs = {
+            'intel_lab': {'nodes': self.network_size, 'area': self.area_size, 'rounds': 200},
             'small_network': {'nodes': 50, 'area': (100, 100), 'rounds': 100},
-            'medium_network': {'nodes': 100, 'area': (200, 200), 'rounds': 150},
-            'large_network': {'nodes': 200, 'area': (300, 300), 'rounds': 200}
+            'medium_network': {'nodes': 100, 'area': (200, 200), 'rounds': 150}
         }
         
     def generate_network_topology(self, num_nodes: int, area_size: Tuple[int, int]) -> Tuple[np.ndarray, np.ndarray]:
@@ -120,8 +130,8 @@ class ComprehensiveEvaluator:
         nodes_data = np.random.rand(network_config['nodes'], 4)
         base_station_pos = np.array([network_config['area'][0]/2, network_config['area'][1]/2])
 
-        # 训练算法
-        training_results = afw_rl.train_episode(nodes_data=nodes_data, base_station_pos=base_station_pos, max_rounds=200)
+        # 训练算法（Intel Lab规模：减少到500轮）
+        training_results = afw_rl.train_episode(nodes_data=nodes_data, base_station_pos=base_station_pos, max_rounds=500)
         
         # 评估性能
         evaluation_results = afw_rl.evaluate(nodes_data=nodes_data, base_station_pos=base_station_pos, max_rounds=network_config['rounds'])
@@ -151,6 +161,14 @@ class ComprehensiveEvaluator:
     
     def evaluate_gnn_cto(self, network_config: Dict) -> Dict:
         """评估GNN-CTO算法"""
+        if not _HAS_GNN:
+            print(f"⚠️ 跳过GNN-CTO（未安装所需依赖 torch_geometric）。原因: {_GNN_IMPORT_ERROR}")
+            return {
+                'algorithm': 'GNN-CTO',
+                'network_config': network_config,
+                'error': 'torch_geometric not available',
+                'metrics': {m: 0.0 for m in self.evaluation_metrics}
+            }
         print(f"🔬 评估GNN-CTO算法 - {network_config}")
         
         start_time = time.time()
@@ -276,11 +294,13 @@ class ComprehensiveEvaluator:
             self.evaluate_baseline_eehfr
         ]
 
-        for config_name, config in self.experiment_configs.items():
-            print(f"\n🚀 开始评估网络配置: {config_name}")
-            for eval_func in algorithms_to_evaluate:
-                result = eval_func(config)
-                all_results.append(result)
+        # 只运行Intel Lab配置
+        config_name = 'intel_lab'
+        config = self.experiment_configs[config_name]
+        print(f"\n🚀 开始评估网络配置: {config_name} (54节点, 25x25m)")
+        for eval_func in algorithms_to_evaluate:
+            result = eval_func(config)
+            all_results.append(result)
         
         self.results = all_results
         self.save_results()
@@ -414,18 +434,31 @@ class ComprehensiveEvaluator:
             print("警告: 评估结果为空，无法生成报告。")
             return {}
         
-
-        
-        comparison_data = []
-        for config_name, config_results in self.results.items():
-            for algorithm, result in config_results.items():
-                if 'metrics' in result:
+        # 处理results可能是list或dict的情况
+        if isinstance(self.results, list):
+            # 直接处理list中的每个算法结果
+            comparison_data = []
+            for result in self.results:
+                if isinstance(result, dict) and 'algorithm' in result and 'metrics' in result:
                     row = {
-                        'Configuration': config_name,
-                        'Algorithm': algorithm,
+                        'Algorithm': result['algorithm'],
+                        'Configuration': 'default',
                         **result['metrics']
                     }
                     comparison_data.append(row)
+        else:
+            # 处理dict格式
+            comparison_data = []
+            for config_name, config_results in self.results.items():
+                if isinstance(config_results, dict):
+                    for algorithm, result in config_results.items():
+                        if isinstance(result, dict) and 'metrics' in result:
+                            row = {
+                                'Configuration': config_name,
+                                'Algorithm': algorithm,
+                                **result['metrics']
+                            }
+                            comparison_data.append(row)
 
         if not comparison_data:
             print("警告: 没有有效的评估数据可供生成报告。")
@@ -599,7 +632,7 @@ class ComprehensiveEvaluator:
             plt.savefig(save_path.replace('.png', '_score_explainability.png'), dpi=300, bbox_inches='tight')
         plt.show()
     
-    def save_results(self, filepath: str):
+    def save_detailed_results(self, filepath: str):
         """保存结果"""
         # 生成完整报告
         report = self.generate_comparison_report()
@@ -653,7 +686,7 @@ def main():
     # 保存结果
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     results_file = f"comprehensive_evaluation_results_{timestamp}.json"
-    evaluator.save_results(results_file)
+    evaluator.save_detailed_results(results_file)
     
     print("\n✅ 综合评估实验完成！")
     

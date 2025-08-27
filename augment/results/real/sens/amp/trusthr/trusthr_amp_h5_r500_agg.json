@@ -1,0 +1,19 @@
+{
+  "n_motes": 9,
+  "total_gen": 180,
+  "pdr_mean": 0.6,
+  "delay_mean": 0.02,
+  "tx_j_sum_data": 0.009314303999999999,
+  "rx_j_sum_data": 0.009216,
+  "cpu_j_sum_data": 0.0009000000000000001,
+  "ctrl_hello_sum": 132,
+  "ctrl_cluster_sum": 33,
+  "ctrl_routing_sum": 33,
+  "ctrl_trust_sum": 33,
+  "ctrl_tx_j_sum": 0.00047695607389324054,
+  "ctrl_rx_j_sum": 0.0017423999999999999,
+  "ctrl_cpu_j_sum": 0.000315,
+  "tx_j_sum_total": 0.00979126007389324,
+  "rx_j_sum_total": 0.0109584,
+  "cpu_j_sum_total": 0.0012150000000000004
+}

@@ -1,0 +1,2 @@
+generated,delivered,pdr,avg_delay_s,avg_hops,ctrl_hello,ctrl_cluster,ctrl_routing,ctrl_trust,data_pkts,tx_j,rx_j,cpu_j,sod_candidates,sod_sent
+81,21,0.259259,0.056190,3.000000,1360,68,136,68,21,2.289069e-02,1.903360e-02,5.920000e-03,0,0

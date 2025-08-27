@@ -1,0 +1,31 @@
+{
+  "area": [100, 100],
+  "nodes": 50,
+  "bs": [50.0, 50.0],
+  "comm_range": 30.0,
+  "payload_bits": 1024,
+  "gen_rate": 0.2,
+  "retries": 2,
+  "noise": 0.0,
+  "rounds": 120,
+  "seeds": [1,2,3,4,5,6,7,8,9,10],
+  "sod_enabled": true,
+  "sod_mode": "adaptive",
+  "sod_k": 1.5,
+  "sod_window": 24,
+  "sod_delta_day": 0.5,
+  "sod_delta_night": 0.2,
+  "trust_enabled": true,
+  "trust_alpha": 0.5,
+  "trust_prior_succ": 0.8,
+  "attack": {
+    "enabled": true,
+    "types": ["sinkhole"],
+    "ratio": 0.1,
+    "sinkhole_bias": 0.5,
+    "start_round": 10,
+    "end_round": 1000000000
+  },
+  "out_json": "augment/results/attack_sinkhole_bias050_agg.json",
+  "per_seed_csv": "augment/results/attack_sinkhole_bias050_seed_{seed}.csv"
+}

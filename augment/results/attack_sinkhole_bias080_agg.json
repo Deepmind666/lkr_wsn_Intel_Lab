@@ -1,0 +1,21 @@
+{
+  "n_runs": 10,
+  "generated_sum": 7000,
+  "delivered_sum": 2685,
+  "pdr_mean": 0.3835713,
+  "pdr_std": 0.042969457856197754,
+  "delay_mean": 0.0634218,
+  "delay_std": 0.0038462905304259658,
+  "hops_mean": 3.0066669999999998,
+  "hops_std": 0.32795669892905754,
+  "tx_j_mean": 0.31446736999999997,
+  "rx_j_mean": 0.5953715199999999,
+  "cpu_j_mean": 0.081512,
+  "attack_active_rounds_mean": 110.0,
+  "attack_compromised_mean": 5.0,
+  "drop_blackhole_mean": 0.0,
+  "drop_grayhole_mean": 0.0,
+  "sinkhole_choices_mean": 230.3,
+  "trust_updates_mean": 6000.0,
+  "malicious_detected_mean": 160.6
+}

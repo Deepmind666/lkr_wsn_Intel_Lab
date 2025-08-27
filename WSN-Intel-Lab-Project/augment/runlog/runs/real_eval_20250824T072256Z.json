@@ -1,0 +1,23 @@
+{
+  "proto": "trusthr",
+  "energy_mode": "elec",
+  "pij_scale": "",
+  "connectivity": "c:\\WSN-Intel-Lab-Project\\augment\\results\\real\\sanity\\conn_scaled_0.95.txt",
+  "cleaned": "c:\\WSN-Intel-Lab-Project\\data\\processed\\cleaned_data.csv",
+  "mote_locs": "c:\\WSN-Intel-Lab-Project\\data\\mote_locs.txt",
+  "out_prefix": "c:\\WSN-Intel-Lab-Project\\augment\\results\\real\\sanity\\f0.95_trusthr_elec",
+  "n_motes": 52,
+  "total_gen": 1540512,
+  "pdr_mean": 0.5630001591938809,
+  "delay_mean": 0.02285819260090152,
+  "tx_j_sum_data": 90.1460992,
+  "rx_j_sum_data": 90.1460992,
+  "run_id": "real_eval_20250824T072256Z",
+  "task_tag": "real_eval",
+  "datetime_utc": "20250824T072256Z",
+  "python": "3.13.7",
+  "platform": "Windows-11-10.0.26100-SP0",
+  "connectivity_sha1": "533a87f5a6bdb3dfa58847e75ef4ca04b2192850",
+  "cleaned_sha1": "6361f61b1085c8ecc6e41d870c3e2de54f18f40d",
+  "mote_locs_sha1": "1250c2b94d905051a45e9bfc0c8bba592bfae77a"
+}

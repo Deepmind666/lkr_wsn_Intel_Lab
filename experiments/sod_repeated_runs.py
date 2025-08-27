@@ -98,7 +98,9 @@ def main():
 
     plt.tight_layout()
     fig_path = fig_dir / f'sod_repeated_{ts}.png'
+    fig_path_pdf = fig_dir / f'sod_repeated_{ts}.pdf'
     plt.savefig(fig_path, dpi=300, bbox_inches='tight')
+    plt.savefig(fig_path_pdf, dpi=300, bbox_inches='tight')
     plt.close()
 
     print('Aggregated results:')

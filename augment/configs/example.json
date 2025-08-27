@@ -1,0 +1,15 @@
+{
+  "area": [100, 100],
+  "nodes": 50,
+  "bs": [50.0, 50.0],
+  "comm_range": 30.0,
+  "payload_bits": 1024,
+  "gen_rate": 0.2,
+  "retries": 2,
+  "noise": 0.0,
+  "rounds": 200,
+  "seeds": [1, 2, 3, 4, 5],
+  "out_json": "WSN-Intel-Lab-Project/augment/results/example_agg.json",
+  "per_seed_csv": "WSN-Intel-Lab-Project/augment/results/example_seed_{seed}.csv"
+}
+

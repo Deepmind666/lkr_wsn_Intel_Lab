@@ -248,7 +248,7 @@ class LSTMTrainer:
         val_losses = []
         early_stop_counter = 0
         
-        print(f"🔄 开始LSTM训练 - 设备: {self.device}")
+        print(f"开始LSTM训练 - 设备: {self.device}")
         
         for epoch in range(epochs):
             # 训练阶段
@@ -314,7 +314,7 @@ class LSTMTrainer:
             
             # 早停
             if early_stop_counter >= patience:
-                print(f"✅ 早停于第 {epoch} 轮")
+                print(f"早停于第 {epoch} 轮")
                 break
         
         # 加载最佳模型
@@ -329,7 +329,7 @@ class LSTMTrainer:
             'training_history': self.training_history
         }
         
-        print(f"✅ LSTM训练完成 - 最佳验证损失: {self.best_loss:.6f}")
+        print(f"LSTM训练完成 - 最佳验证损失: {self.best_loss:.6f}")
         
         return training_stats
     
@@ -372,7 +372,7 @@ class LSTMTrainer:
             'targets': targets
         }
         
-        print(f"✅ 模型评估完成:")
+        print(f"模型评估完成:")
         print(f"   MAE: {mae:.6f}")
         print(f"   RMSE: {rmse:.6f}")
         print(f"   R²: {r2:.6f}")
@@ -560,7 +560,7 @@ class WSNLSTMSystem:
         
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
-            print(f"✅ LSTM结果图表已保存到: {save_path}")
+        print(f"LSTM结果图表已保存到: {save_path}")
         
         return fig
     
@@ -581,7 +581,7 @@ class WSNLSTMSystem:
             'preprocessor': self.preprocessor
         }, save_path)
         
-        print(f"✅ LSTM模型已保存到: {save_path}")
+        print(f"LSTM模型已保存到: {save_path}")
     
     def load_model(self, load_path: str):
         """加载模型"""
@@ -595,7 +595,7 @@ class WSNLSTMSystem:
         self.preprocessor = checkpoint['preprocessor']
         self.trainer = LSTMTrainer(self.model, self.device)
         
-        print(f"✅ LSTM模型已从 {load_path} 加载")
+        print(f"LSTM模型已从 {load_path} 加载")
 
 if __name__ == "__main__":
     # 测试LSTM预测系统

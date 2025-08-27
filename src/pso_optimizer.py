@@ -170,7 +170,7 @@ class PSOOptimizer:
             (最优簇头索引, 最优适应度)
         """
         
-        print(f"🔄 启动PSO优化 - 粒子数: {self.n_particles}, 迭代数: {self.n_iterations}")
+        print(f"启动PSO优化 - 粒子数: {self.n_particles}, 迭代数: {self.n_iterations}")
         
         # 初始化粒子群
         particles = self._initialize_particles(len(nodes_data), n_clusters)
@@ -230,7 +230,7 @@ class PSOOptimizer:
                 
                 if stagnation_count >= 20:
                     self.convergence_iteration = iteration
-                    print(f"✅ PSO在第{iteration}轮收敛")
+                    print(f"PSO在第{iteration}轮收敛")
                     break
             
             if iteration % 20 == 0:
@@ -241,7 +241,7 @@ class PSOOptimizer:
                                       len(nodes_data) - 1).astype(int)
         optimal_cluster_heads = np.unique(optimal_cluster_heads)
         
-        print(f"✅ PSO优化完成 - 最优适应度: {global_best_fitness:.6f}")
+        print(f"PSO优化完成 - 最优适应度: {global_best_fitness:.6f}")
         print(f"   选择的簇头: {optimal_cluster_heads}")
         
         return optimal_cluster_heads, global_best_fitness
@@ -306,7 +306,7 @@ class PSOOptimizer:
         
         if save_path:
             plt.savefig(save_path, dpi=300, bbox_inches='tight')
-            print(f"✅ PSO收敛图表已保存到: {save_path}")
+            print(f"PSO收敛图表已保存到: {save_path}")
         
         return fig
     
@@ -343,7 +343,7 @@ class PSOOptimizer:
         with open(save_path, 'w', encoding='utf-8') as f:
             json.dump(summary, f, indent=2, ensure_ascii=False)
         
-        print(f"✅ PSO优化结果已保存到: {save_path}")
+        print(f"PSO优化结果已保存到: {save_path}")
 
 if __name__ == "__main__":
     # 测试PSO优化器

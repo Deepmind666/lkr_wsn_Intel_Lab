@@ -103,8 +103,11 @@ def main():
         axes[i].legend()
     plt.tight_layout()
     fig_path = fig_dir / f'routing_comparison_{ts}.png'
-    plt.savefig(fig_path, dpi=300, bbox_inches='tight'); plt.close()
-    print('Saved:', csv_path, fig_path)
+    fig_path_pdf = fig_dir / f'routing_comparison_{ts}.pdf'
+    plt.savefig(fig_path, dpi=300, bbox_inches='tight')
+    plt.savefig(fig_path_pdf, dpi=300, bbox_inches='tight')
+    plt.close()
+    print('Saved:', csv_path, fig_path, fig_path_pdf)
 
 
 if __name__ == '__main__':

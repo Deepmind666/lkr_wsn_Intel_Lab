@@ -4,7 +4,7 @@
 
 ## 环境准备
 
-1. 确保已安装Python 3.7+
+1. 确保已安装Python 3.8+（建议 3.10/3.11）
 2. 安装所需依赖库：
 
 ```bash
@@ -19,7 +19,7 @@ pip install -r requirements.txt
 - `src/models/metaheuristic/pso.py`：粒子群优化算法
 - `src/models/time_series/lstm.py`：LSTM时序预测模型
 - `src/models/reliability/fuzzy_logic.py`：模糊逻辑可靠性评估模型
-- `experiments/scripts/compare_routing_protocols.py`：路由协议比较实验脚本
+- `experiments/routing_comparison.py`：路由协议比较实验脚本
 - `experiments/configs/routing_comparison.yaml`：实验配置文件
 - `main.py`：项目主脚本
 
@@ -98,12 +98,10 @@ python main.py visualize --result-file path/to/your/result.json
 - 协议参数：LEACH、PSO、混合智能节能路由协议的参数
 - 输出设置：结果保存目录、图表保存目录
 
-## 测试单个路由协议
-
-如果您只想测试混合智能节能路由协议，可以直接运行：
+## 运行综合算法评估（可选）
 
 ```bash
-python -c "from src.models.routing.hybrid_routing import test_hybrid_routing; test_hybrid_routing()"
+python main.py experiment --experiment comprehensive
 ```
 
 ## 实验结果解释
@@ -126,7 +124,7 @@ python -c "from src.models.routing.hybrid_routing import test_hybrid_routing; te
 
 如果遇到问题，请检查：
 
-1. Python版本是否为3.7+
+1. Python版本是否为3.8+
 2. 是否已安装所有依赖库
 3. 项目路径是否正确
 4. 数据集是否已正确下载和预处理

@@ -1,0 +1,2 @@
+seed,generated,delivered,pdr,avg_delay_s,avg_hops,ctrl_hello,ctrl_cluster,ctrl_routing,ctrl_trust,data_pkts,tx_j,rx_j,cpu_j,sod_candidates,sod_sent
+4,1962,703,0.358308,0.060853,2.358464,100800,5040,10080,3528,703,7.936072e-01,1.079578e+00,1.793900e-01,0,0

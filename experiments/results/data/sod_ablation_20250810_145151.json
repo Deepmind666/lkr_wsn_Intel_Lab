@@ -1,0 +1,1030 @@
+{
+  "sod_off": {
+    "config": {
+      "sod_enabled": false,
+      "rounds": 60,
+      "num_nodes": 30
+    },
+    "summary": {
+      "total_energy_consumed": 0.017277210237782663,
+      "avg_sod_trigger_ratio": 1.0,
+      "final_alive_nodes": 30
+    },
+    "final_metrics": {
+      "total_energy_consumption": 0.017277210237793383,
+      "average_energy_consumption": 0.0005759070079264461,
+      "energy_efficiency": 0.9997120464960367,
+      "first_node_death": 0,
+      "half_nodes_death": 0,
+      "network_lifetime": 0,
+      "packet_delivery_ratio": 0.8502159032460406,
+      "average_delay": 21.147779656059235,
+      "throughput": 300,
+      "average_hop_count": 2.2168849117182443,
+      "routing_overhead": 0.180385089384518,
+      "average_trust_value": 0.6682624711722628,
+      "malicious_detection_rate": 0.0,
+      "false_positive_rate": 0.0,
+      "prediction_accuracy": 0.0,
+      "prediction_mae": 0.0,
+      "prediction_rmse": 0.0,
+      "sod_trigger_ratio": 1.0
+    },
+    "per_round": [
+      {
+        "round": 1,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028764375472567396,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.999995205937421,
+        "avg_trust": 0.543113986981202
+      },
+      {
+        "round": 2,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028764375472567396,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999904118748425,
+        "avg_trust": 0.5766838026718765
+      },
+      {
+        "round": 3,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028764375472567396,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999856178122638,
+        "avg_trust": 0.6095813987747957
+      },
+      {
+        "round": 4,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028764375472567396,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.999980823749685,
+        "avg_trust": 0.6331568420642036
+      },
+      {
+        "round": 5,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028764375472567396,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999760296871062,
+        "avg_trust": 0.6496425323938243
+      },
+      {
+        "round": 6,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002890005313147862,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999712130115841,
+        "avg_trust": 0.651797463655572
+      },
+      {
+        "round": 7,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002890005313147862,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999663963360621,
+        "avg_trust": 0.6504969901227923
+      },
+      {
+        "round": 8,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002890005313147862,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999615796605403,
+        "avg_trust": 0.6562140284615862
+      },
+      {
+        "round": 9,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002890005313147862,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999567629850185,
+        "avg_trust": 0.6630694407563749
+      },
+      {
+        "round": 10,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002890005313147862,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999519463094965,
+        "avg_trust": 0.6663045167397889
+      },
+      {
+        "round": 11,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028848972811016115,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999471381473616,
+        "avg_trust": 0.6598623680368484
+      },
+      {
+        "round": 12,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028848972811016115,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999423299852263,
+        "avg_trust": 0.6664634558133741
+      },
+      {
+        "round": 13,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028848972811016115,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.999937521823091,
+        "avg_trust": 0.6606086580096237
+      },
+      {
+        "round": 14,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028848972811016115,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999327136609556,
+        "avg_trust": 0.6670801287174252
+      },
+      {
+        "round": 15,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028848972811016115,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999279054988209,
+        "avg_trust": 0.6739389509926603
+      },
+      {
+        "round": 16,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028796685020265135,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999231060513174,
+        "avg_trust": 0.6799062872267375
+      },
+      {
+        "round": 17,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028796685020265135,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999183066038139,
+        "avg_trust": 0.6798584020142073
+      },
+      {
+        "round": 18,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028796685020265135,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999135071563104,
+        "avg_trust": 0.6760607909024433
+      },
+      {
+        "round": 19,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028796685020265135,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999087077088071,
+        "avg_trust": 0.6739993668636193
+      },
+      {
+        "round": 20,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028796685020265135,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9999039082613039,
+        "avg_trust": 0.6745308989638399
+      },
+      {
+        "round": 21,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002878972986868784,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998991099729921,
+        "avg_trust": 0.6613760269225467
+      },
+      {
+        "round": 22,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002878972986868784,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.999894311684681,
+        "avg_trust": 0.6684141456714302
+      },
+      {
+        "round": 23,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002878972986868784,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998895133963696,
+        "avg_trust": 0.6662026099873378
+      },
+      {
+        "round": 24,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002878972986868784,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998847151080579,
+        "avg_trust": 0.6727633987495757
+      },
+      {
+        "round": 25,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002878972986868784,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998799168197466,
+        "avg_trust": 0.6768229200793257
+      },
+      {
+        "round": 26,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002873742905494927,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998751272482375,
+        "avg_trust": 0.68240832374431
+      },
+      {
+        "round": 27,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002873742905494927,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998703376767284,
+        "avg_trust": 0.6753445062226213
+      },
+      {
+        "round": 28,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002873742905494927,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998655481052192,
+        "avg_trust": 0.6827090170765974
+      },
+      {
+        "round": 29,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002873742905494927,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998607585337098,
+        "avg_trust": 0.6819353905578841
+      },
+      {
+        "round": 30,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002873742905494927,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998559689622006,
+        "avg_trust": 0.6654336946095689
+      },
+      {
+        "round": 31,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028750852639741135,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998511771534275,
+        "avg_trust": 0.6686629453148679
+      },
+      {
+        "round": 32,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028750852639741135,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.999846385344654,
+        "avg_trust": 0.6715323362547625
+      },
+      {
+        "round": 33,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028750852639741135,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998415935358806,
+        "avg_trust": 0.6762545479042001
+      },
+      {
+        "round": 34,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028750852639741135,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998368017271074,
+        "avg_trust": 0.672706016366641
+      },
+      {
+        "round": 35,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028750852639741135,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998320099183342,
+        "avg_trust": 0.6709918867640113
+      },
+      {
+        "round": 36,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002879093837225452,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998272114286054,
+        "avg_trust": 0.6697002916423551
+      },
+      {
+        "round": 37,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002879093837225452,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.999822412938877,
+        "avg_trust": 0.6678936938765664
+      },
+      {
+        "round": 38,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002879093837225452,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998176144491481,
+        "avg_trust": 0.6674159169203279
+      },
+      {
+        "round": 39,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002879093837225452,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998128159594196,
+        "avg_trust": 0.6671177172796814
+      },
+      {
+        "round": 40,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002879093837225452,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9998080174696907,
+        "avg_trust": 0.6726997562555093
+      },
+      {
+        "round": 41,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028852126377931835,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.999803208781961,
+        "avg_trust": 0.6771676618612097
+      },
+      {
+        "round": 42,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028852126377931835,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9997984000942314,
+        "avg_trust": 0.6796489575262897
+      },
+      {
+        "round": 43,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028852126377931835,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9997935914065015,
+        "avg_trust": 0.6774583180260865
+      },
+      {
+        "round": 44,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028852126377931835,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9997887827187719,
+        "avg_trust": 0.6640875458235059
+      },
+      {
+        "round": 45,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028852126377931835,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9997839740310425,
+        "avg_trust": 0.6695971320732323
+      },
+      {
+        "round": 46,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028836515612119313,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.999779167945107,
+        "avg_trust": 0.6662708833650973
+      },
+      {
+        "round": 47,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028836515612119313,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9997743618591718,
+        "avg_trust": 0.6679272673180825
+      },
+      {
+        "round": 48,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028836515612119313,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9997695557732361,
+        "avg_trust": 0.671138652278554
+      },
+      {
+        "round": 49,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028836515612119313,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.999764749687301,
+        "avg_trust": 0.6665754607076088
+      },
+      {
+        "round": 50,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028836515612119313,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9997599436013656,
+        "avg_trust": 0.6709791243368846
+      },
+      {
+        "round": 51,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028749222178932896,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.999755152064336,
+        "avg_trust": 0.6609469211534963
+      },
+      {
+        "round": 52,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028749222178932896,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9997503605273059,
+        "avg_trust": 0.6657005207271683
+      },
+      {
+        "round": 53,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028749222178932896,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9997455689902764,
+        "avg_trust": 0.6666496566877922
+      },
+      {
+        "round": 54,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028749222178932896,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9997407774532461,
+        "avg_trust": 0.6773992480214999
+      },
+      {
+        "round": 55,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028749222178932896,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9997359859162167,
+        "avg_trust": 0.6755209490670627
+      },
+      {
+        "round": 56,
+        "alive_nodes": 30,
+        "energy_consumed": 0.000287273042157093,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9997311980321807,
+        "avg_trust": 0.6641534097325903
+      },
+      {
+        "round": 57,
+        "alive_nodes": 30,
+        "energy_consumed": 0.000287273042157093,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9997264101481446,
+        "avg_trust": 0.6602669141299432
+      },
+      {
+        "round": 58,
+        "alive_nodes": 30,
+        "energy_consumed": 0.000287273042157093,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9997216222641087,
+        "avg_trust": 0.6660899942075829
+      },
+      {
+        "round": 59,
+        "alive_nodes": 30,
+        "energy_consumed": 0.000287273042157093,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9997168343800727,
+        "avg_trust": 0.6679653895186374
+      },
+      {
+        "round": 60,
+        "alive_nodes": 30,
+        "energy_consumed": 0.000287273042157093,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.9997120464960367,
+        "avg_trust": 0.6682624711722628
+      }
+    ]
+  },
+  "sod_on": {
+    "config": {
+      "sod_enabled": true,
+      "rounds": 60,
+      "num_nodes": 30
+    },
+    "summary": {
+      "total_energy_consumed": 0.0032000431363076566,
+      "avg_sod_trigger_ratio": 0.17722222222222223,
+      "final_alive_nodes": 30
+    },
+    "final_metrics": {
+      "total_energy_consumption": 0.0032000431363030657,
+      "average_energy_consumption": 0.00010666810454343553,
+      "energy_efficiency": 0.9999466659477283,
+      "first_node_death": 0,
+      "half_nodes_death": 0,
+      "network_lifetime": 0,
+      "packet_delivery_ratio": 0.8502159032460406,
+      "average_delay": 21.147779656059235,
+      "throughput": 300,
+      "average_hop_count": 2.2168849117182443,
+      "routing_overhead": 0.180385089384518,
+      "average_trust_value": 0.6683124395992609,
+      "malicious_detection_rate": 0.0,
+      "false_positive_rate": 0.0,
+      "prediction_accuracy": 0.0,
+      "prediction_mae": 0.0,
+      "prediction_rmse": 0.0,
+      "sod_trigger_ratio": 0.23333333333333334
+    },
+    "per_round": [
+      {
+        "round": 1,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028764375472567396,
+        "sod_trigger_ratio": 1.0,
+        "energy_efficiency": 0.999995205937421,
+        "avg_trust": 0.543113986981202
+      },
+      {
+        "round": 2,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00027754668006947663,
+        "sod_trigger_ratio": 0.9333333333333333,
+        "energy_efficiency": 0.9999905801594202,
+        "avg_trust": 0.5766838026718765
+      },
+      {
+        "round": 3,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00028253249388722295,
+        "sod_trigger_ratio": 0.9666666666666667,
+        "energy_efficiency": 0.9999858712845219,
+        "avg_trust": 0.609581411396139
+      },
+      {
+        "round": 4,
+        "alive_nodes": 30,
+        "energy_consumed": 0.0002374070917799122,
+        "sod_trigger_ratio": 0.9666666666666667,
+        "energy_efficiency": 0.999981914499659,
+        "avg_trust": 0.6331568694592707
+      },
+      {
+        "round": 5,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00022734536604808683,
+        "sod_trigger_ratio": 0.9,
+        "energy_efficiency": 0.9999781254102249,
+        "avg_trust": 0.6496426324017217
+      },
+      {
+        "round": 6,
+        "alive_nodes": 30,
+        "energy_consumed": 3.0394336641354865e-05,
+        "sod_trigger_ratio": 0.2,
+        "energy_efficiency": 0.9999776188379474,
+        "avg_trust": 0.6517976872768626
+      },
+      {
+        "round": 7,
+        "alive_nodes": 30,
+        "energy_consumed": 6.584800949858357e-05,
+        "sod_trigger_ratio": 0.13333333333333333,
+        "energy_efficiency": 0.9999765213711225,
+        "avg_trust": 0.6504976191530109
+      },
+      {
+        "round": 8,
+        "alive_nodes": 30,
+        "energy_consumed": 7.516381118557696e-05,
+        "sod_trigger_ratio": 0.2,
+        "energy_efficiency": 0.9999752686409362,
+        "avg_trust": 0.65621520595221
+      },
+      {
+        "round": 9,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00012108456181732447,
+        "sod_trigger_ratio": 0.2,
+        "energy_efficiency": 0.9999732505649058,
+        "avg_trust": 0.6630712500795716
+      },
+      {
+        "round": 10,
+        "alive_nodes": 30,
+        "energy_consumed": 2.5902458414790367e-05,
+        "sod_trigger_ratio": 0.16666666666666666,
+        "energy_efficiency": 0.9999728188572655,
+        "avg_trust": 0.6663069558821177
+      },
+      {
+        "round": 11,
+        "alive_nodes": 30,
+        "energy_consumed": 1.0228425215534488e-05,
+        "sod_trigger_ratio": 0.06666666666666667,
+        "energy_efficiency": 0.9999726483835117,
+        "avg_trust": 0.6598655545737527
+      },
+      {
+        "round": 12,
+        "alive_nodes": 30,
+        "energy_consumed": 8.60800828156082e-05,
+        "sod_trigger_ratio": 0.26666666666666666,
+        "energy_efficiency": 0.9999712137154647,
+        "avg_trust": 0.6664674872296666
+      },
+      {
+        "round": 13,
+        "alive_nodes": 30,
+        "energy_consumed": 7.051550825796661e-05,
+        "sod_trigger_ratio": 0.16666666666666666,
+        "energy_efficiency": 0.9999700384569937,
+        "avg_trust": 0.6606135043647587
+      },
+      {
+        "round": 14,
+        "alive_nodes": 30,
+        "energy_consumed": 4.9999999999999996e-06,
+        "sod_trigger_ratio": 0.03333333333333333,
+        "energy_efficiency": 0.9999699551236605,
+        "avg_trust": 0.6670857896642438
+      },
+      {
+        "round": 15,
+        "alive_nodes": 30,
+        "energy_consumed": 5.365858444843608e-06,
+        "sod_trigger_ratio": 0.03333333333333333,
+        "energy_efficiency": 0.9999698656926864,
+        "avg_trust": 0.6739455080595377
+      },
+      {
+        "round": 16,
+        "alive_nodes": 30,
+        "energy_consumed": 1.540588158337705e-05,
+        "sod_trigger_ratio": 0.1,
+        "energy_efficiency": 0.9999696089279934,
+        "avg_trust": 0.6799137940965292
+      },
+      {
+        "round": 17,
+        "alive_nodes": 30,
+        "energy_consumed": 0,
+        "sod_trigger_ratio": 0.0,
+        "energy_efficiency": 0.9999696089279934,
+        "avg_trust": 0.6798668811129154
+      },
+      {
+        "round": 18,
+        "alive_nodes": 30,
+        "energy_consumed": 6.039136383473365e-05,
+        "sod_trigger_ratio": 0.1,
+        "energy_efficiency": 0.9999686024052629,
+        "avg_trust": 0.6760702764988952
+      },
+      {
+        "round": 19,
+        "alive_nodes": 30,
+        "energy_consumed": 5.070503193891103e-06,
+        "sod_trigger_ratio": 0.03333333333333333,
+        "energy_efficiency": 0.9999685178968764,
+        "avg_trust": 0.6740098062061405
+      },
+      {
+        "round": 20,
+        "alive_nodes": 30,
+        "energy_consumed": 5.0456438179479066e-06,
+        "sod_trigger_ratio": 0.03333333333333333,
+        "energy_efficiency": 0.9999684338028128,
+        "avg_trust": 0.6745423261430133
+      },
+      {
+        "round": 21,
+        "alive_nodes": 30,
+        "energy_consumed": 0,
+        "sod_trigger_ratio": 0.0,
+        "energy_efficiency": 0.9999684338028128,
+        "avg_trust": 0.6613884647577994
+      },
+      {
+        "round": 22,
+        "alive_nodes": 30,
+        "energy_consumed": 7.052709054446058e-05,
+        "sod_trigger_ratio": 0.16666666666666666,
+        "energy_efficiency": 0.9999672583513036,
+        "avg_trust": 0.668427615783786
+      },
+      {
+        "round": 23,
+        "alive_nodes": 30,
+        "energy_consumed": 1.5235540157846988e-05,
+        "sod_trigger_ratio": 0.1,
+        "energy_efficiency": 0.9999670044256346,
+        "avg_trust": 0.6662170384387487
+      },
+      {
+        "round": 24,
+        "alive_nodes": 30,
+        "energy_consumed": 2.0404826515782183e-05,
+        "sod_trigger_ratio": 0.13333333333333333,
+        "energy_efficiency": 0.9999666643451925,
+        "avg_trust": 0.6727788054469301
+      },
+      {
+        "round": 25,
+        "alive_nodes": 30,
+        "energy_consumed": 8.595309242020285e-05,
+        "sod_trigger_ratio": 0.26666666666666666,
+        "energy_efficiency": 0.9999652317936522,
+        "avg_trust": 0.6768393117532407
+      },
+      {
+        "round": 26,
+        "alive_nodes": 30,
+        "energy_consumed": 6.530928719007883e-05,
+        "sod_trigger_ratio": 0.13333333333333333,
+        "energy_efficiency": 0.9999641433055324,
+        "avg_trust": 0.682425622808919
+      },
+      {
+        "round": 27,
+        "alive_nodes": 30,
+        "energy_consumed": 8.569891217692822e-05,
+        "sod_trigger_ratio": 0.26666666666666666,
+        "energy_efficiency": 0.9999627149903294,
+        "avg_trust": 0.6753626859287853
+      },
+      {
+        "round": 28,
+        "alive_nodes": 30,
+        "energy_consumed": 7.088316325169641e-05,
+        "sod_trigger_ratio": 0.16666666666666666,
+        "energy_efficiency": 0.9999615336042752,
+        "avg_trust": 0.6827280343122055
+      },
+      {
+        "round": 29,
+        "alive_nodes": 30,
+        "energy_consumed": 2.026462688931808e-05,
+        "sod_trigger_ratio": 0.13333333333333333,
+        "energy_efficiency": 0.9999611958604936,
+        "avg_trust": 0.6819552351281152
+      },
+      {
+        "round": 30,
+        "alive_nodes": 30,
+        "energy_consumed": 6.524324871962626e-05,
+        "sod_trigger_ratio": 0.13333333333333333,
+        "energy_efficiency": 0.999960108473015,
+        "avg_trust": 0.6654544230995438
+      },
+      {
+        "round": 31,
+        "alive_nodes": 30,
+        "energy_consumed": 1.0030877106194655e-05,
+        "sod_trigger_ratio": 0.06666666666666667,
+        "energy_efficiency": 0.9999599412917299,
+        "avg_trust": 0.6686845395724454
+      },
+      {
+        "round": 32,
+        "alive_nodes": 30,
+        "energy_consumed": 7.032860482069056e-05,
+        "sod_trigger_ratio": 0.16666666666666666,
+        "energy_efficiency": 0.9999587691483162,
+        "avg_trust": 0.6715548537174685
+      },
+      {
+        "round": 33,
+        "alive_nodes": 30,
+        "energy_consumed": 7.057198580339555e-05,
+        "sod_trigger_ratio": 0.16666666666666666,
+        "energy_efficiency": 0.9999575929485528,
+        "avg_trust": 0.6762779511472374
+      },
+      {
+        "round": 34,
+        "alive_nodes": 30,
+        "energy_consumed": 2.0397815599300714e-05,
+        "sod_trigger_ratio": 0.13333333333333333,
+        "energy_efficiency": 0.9999572529849595,
+        "avg_trust": 0.6727302799909771
+      },
+      {
+        "round": 35,
+        "alive_nodes": 30,
+        "energy_consumed": 2.0356998831864267e-05,
+        "sod_trigger_ratio": 0.13333333333333333,
+        "energy_efficiency": 0.9999569137016456,
+        "avg_trust": 0.6710170564815736
+      },
+      {
+        "round": 36,
+        "alive_nodes": 30,
+        "energy_consumed": 1.0037969902219098e-05,
+        "sod_trigger_ratio": 0.06666666666666667,
+        "energy_efficiency": 0.9999567464021474,
+        "avg_trust": 0.6697263979106812
+      },
+      {
+        "round": 37,
+        "alive_nodes": 30,
+        "energy_consumed": 1.0000981436456983e-05,
+        "sod_trigger_ratio": 0.06666666666666667,
+        "energy_efficiency": 0.9999565797191233,
+        "avg_trust": 0.6679207700510433
+      },
+      {
+        "round": 38,
+        "alive_nodes": 30,
+        "energy_consumed": 6.0228312930298746e-05,
+        "sod_trigger_ratio": 0.1,
+        "energy_efficiency": 0.9999555759139078,
+        "avg_trust": 0.6674439855491112
+      },
+      {
+        "round": 39,
+        "alive_nodes": 30,
+        "energy_consumed": 5.003893398034867e-05,
+        "sod_trigger_ratio": 0.03333333333333333,
+        "energy_efficiency": 0.9999547419316748,
+        "avg_trust": 0.6671467304745823
+      },
+      {
+        "round": 40,
+        "alive_nodes": 30,
+        "energy_consumed": 1.0171427859869833e-05,
+        "sod_trigger_ratio": 0.06666666666666667,
+        "energy_efficiency": 0.9999545724078771,
+        "avg_trust": 0.6727296947159421
+      },
+      {
+        "round": 41,
+        "alive_nodes": 30,
+        "energy_consumed": 1.0130002950674764e-05,
+        "sod_trigger_ratio": 0.06666666666666667,
+        "energy_efficiency": 0.9999544035744947,
+        "avg_trust": 0.6771985627226967
+      },
+      {
+        "round": 42,
+        "alive_nodes": 30,
+        "energy_consumed": 5.0662114809092086e-06,
+        "sod_trigger_ratio": 0.03333333333333333,
+        "energy_efficiency": 0.9999543191376365,
+        "avg_trust": 0.6796808463405619
+      },
+      {
+        "round": 43,
+        "alive_nodes": 30,
+        "energy_consumed": 5.145159095072493e-06,
+        "sod_trigger_ratio": 0.03333333333333333,
+        "energy_efficiency": 0.999954233384985,
+        "avg_trust": 0.6774912179179808
+      },
+      {
+        "round": 44,
+        "alive_nodes": 30,
+        "energy_consumed": 5.08545296298411e-06,
+        "sod_trigger_ratio": 0.03333333333333333,
+        "energy_efficiency": 0.9999541486274357,
+        "avg_trust": 0.6641214718349696
+      },
+      {
+        "round": 45,
+        "alive_nodes": 30,
+        "energy_consumed": 1.5039100978013826e-05,
+        "sod_trigger_ratio": 0.1,
+        "energy_efficiency": 0.9999538979757526,
+        "avg_trust": 0.6696320945175641
+      },
+      {
+        "round": 46,
+        "alive_nodes": 30,
+        "energy_consumed": 1.0366518540214336e-05,
+        "sod_trigger_ratio": 0.06666666666666667,
+        "energy_efficiency": 0.9999537252004436,
+        "avg_trust": 0.666306876849095
+      },
+      {
+        "round": 47,
+        "alive_nodes": 30,
+        "energy_consumed": 1.0368344963643859e-05,
+        "sod_trigger_ratio": 0.06666666666666667,
+        "energy_efficiency": 0.9999535523946943,
+        "avg_trust": 0.6679642942534596
+      },
+      {
+        "round": 48,
+        "alive_nodes": 30,
+        "energy_consumed": 5.504821675239006e-05,
+        "sod_trigger_ratio": 0.06666666666666667,
+        "energy_efficiency": 0.999952634924415,
+        "avg_trust": 0.6711767143230915
+      },
+      {
+        "round": 49,
+        "alive_nodes": 30,
+        "energy_consumed": 0,
+        "sod_trigger_ratio": 0.0,
+        "energy_efficiency": 0.999952634924415,
+        "avg_trust": 0.666614503359341
+      },
+      {
+        "round": 50,
+        "alive_nodes": 30,
+        "energy_consumed": 5.204087029008059e-06,
+        "sod_trigger_ratio": 0.03333333333333333,
+        "energy_efficiency": 0.9999525481896311,
+        "avg_trust": 0.671019179886585
+      },
+      {
+        "round": 51,
+        "alive_nodes": 30,
+        "energy_consumed": 0,
+        "sod_trigger_ratio": 0.0,
+        "energy_efficiency": 0.9999525481896311,
+        "avg_trust": 0.6609880043179364
+      },
+      {
+        "round": 52,
+        "alive_nodes": 30,
+        "energy_consumed": 0,
+        "sod_trigger_ratio": 0.0,
+        "energy_efficiency": 0.9999525481896311,
+        "avg_trust": 0.6657426467233318
+      },
+      {
+        "round": 53,
+        "alive_nodes": 30,
+        "energy_consumed": 2.0160511249343197e-05,
+        "sod_trigger_ratio": 0.13333333333333333,
+        "energy_efficiency": 0.9999522121811104,
+        "avg_trust": 0.6666928354948266
+      },
+      {
+        "round": 54,
+        "alive_nodes": 30,
+        "energy_consumed": 7.096121231990873e-05,
+        "sod_trigger_ratio": 0.16666666666666666,
+        "energy_efficiency": 0.9999510294942385,
+        "avg_trust": 0.677443460745965
+      },
+      {
+        "round": 55,
+        "alive_nodes": 30,
+        "energy_consumed": 1.5248924987104839e-05,
+        "sod_trigger_ratio": 0.1,
+        "energy_efficiency": 0.9999507753454887,
+        "avg_trust": 0.6755661197026909
+      },
+      {
+        "round": 56,
+        "alive_nodes": 30,
+        "energy_consumed": 6.517735476804147e-05,
+        "sod_trigger_ratio": 0.13333333333333333,
+        "energy_efficiency": 0.9999496890562425,
+        "avg_trust": 0.6641995571394426
+      },
+      {
+        "round": 57,
+        "alive_nodes": 30,
+        "energy_consumed": 2.0172014081935016e-05,
+        "sod_trigger_ratio": 0.13333333333333333,
+        "energy_efficiency": 0.9999493528560078,
+        "avg_trust": 0.660313988654071
+      },
+      {
+        "round": 58,
+        "alive_nodes": 30,
+        "energy_consumed": 2.5267677483951027e-05,
+        "sod_trigger_ratio": 0.16666666666666666,
+        "energy_efficiency": 0.9999489317280499,
+        "avg_trust": 0.6661380190488014
+      },
+      {
+        "round": 59,
+        "alive_nodes": 30,
+        "energy_consumed": 1.0265195883787949e-05,
+        "sod_trigger_ratio": 0.06666666666666667,
+        "energy_efficiency": 0.9999487606414518,
+        "avg_trust": 0.668014373712652
+      },
+      {
+        "round": 60,
+        "alive_nodes": 30,
+        "energy_consumed": 0.00012568162341218897,
+        "sod_trigger_ratio": 0.23333333333333334,
+        "energy_efficiency": 0.9999466659477283,
+        "avg_trust": 0.6683124395992609
+      }
+    ]
+  }
+}

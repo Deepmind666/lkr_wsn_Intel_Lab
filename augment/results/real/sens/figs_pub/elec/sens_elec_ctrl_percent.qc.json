@@ -1,0 +1,14 @@
+{
+  "exists": true,
+  "has_target_legend": true,
+  "has_crossing_annotation": true,
+  "has_ylabel_text": true,
+  "strict_pass": true,
+  "data_points": 18,
+  "data_min": 7.609889791860931,
+  "data_max": 7.609889791860931,
+  "unit_class": "percent",
+  "unit_mismatch": false,
+  "range_ok": true,
+  "pass": true
+}

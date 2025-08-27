@@ -1,0 +1,7 @@
+baseline,scenario,p_pdr,p_delay,p_txrx
+attack_off_smoke,attack_blackhole_10pct,0.32648466084998595,1.0,0.6130030959752322
+attack_off_smoke,attack_blackhole_30pct,0.0002489770291627877,1.0,0.23475286323583539
+attack_off_smoke,attack_grayhole_50pct_p050,0.0025655459091991598,1.0,0.35312520297040423
+attack_off_smoke,attack_grayhole_50pct_p090,2.165017644893806e-05,1.0,0.12231267184827556
+attack_off_smoke,attack_sinkhole_bias050,0.8692654095130875,1.0,0.8179761415055533
+attack_off_smoke,attack_sinkhole_bias080,0.8605403884041655,1.0,0.8194483535040811

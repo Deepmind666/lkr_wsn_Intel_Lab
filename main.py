@@ -80,25 +80,51 @@ def run_experiment(args):
     Args:
         args: 命令行参数
     """
-    # 动态导入综合评估器
-    from experiments.comprehensive_algorithm_evaluation import ComprehensiveEvaluator
-    
-    logger.info("开始运行综合算法评估实验")
-    
-    # 创建评估器实例
-    evaluator = ComprehensiveEvaluator()
-    
-    # 运行评估
-    evaluator.run_all_evaluations()
-
-    # 保存结果
-    evaluator.save_results()
-
-    # 可视化结果
-    evaluator.visualize_results()
-    
-    # 打印结果摘要
-    logger.info("实验完成，结果已保存并可视化。")
+    # 基于参数选择实验
+    exp = getattr(args, 'experiment', 'routing_comparison')
+    if exp == 'routing_comparison':
+        logger.info("运行路由协议比较实验 (ACO vs Baseline, SoD on/off)")
+        from experiments.routing_comparison import main as rc_main
+        # 传递配置文件参数（如果有的话）
+        config_path = getattr(args, 'config', None)
+        if config_path:
+            logger.info(f"使用配置文件: {config_path}")
+            # TODO: 在routing_comparison中实现配置文件读取
+        rc_main()
+        logger.info("routing_comparison 实验完成")
+        return
+    elif exp == 'comprehensive':
+        from experiments.comprehensive_algorithm_evaluation import ComprehensiveEvaluator
+        logger.info("开始运行综合算法评估实验 (AFW-RL / GNN-CTO / ILMR / EEHFR)")
+        # Intel Lab真实规模：54节点，500轮评估
+        evaluator = ComprehensiveEvaluator(network_size=54, area_size=(25, 25))
+        evaluator.run_all_evaluations()
+        # 保存结果
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        out_path = os.path.join(project_root, 'results', 'data', f'comprehensive_results_{timestamp}.json')
+        os.makedirs(os.path.dirname(out_path), exist_ok=True)
+        evaluator.save_detailed_results(out_path)
+        # 可视化结果
+        evaluator.visualize_results('comprehensive_algorithm_comparison.png')
+        logger.info("综合评估实验完成，结果已保存并可视化。")
+        return
+    elif exp == 'baseline_comparison':
+        logger.info("运行基线协议对比实验 (LEACH vs HEED vs DirectTransmission)")
+        from src.baseline_algorithms import run_protocol_comparison
+        from src.visualize_baselines import main as visualize_main
+        
+        # 运行基线对比（Intel Lab真实规模：54节点，1000轮）
+        results = run_protocol_comparison(num_nodes=54, num_rounds=1000)
+        logger.info("基线协议对比实验完成")
+        
+        # 自动生成可视化
+        logger.info("生成基线对比可视化图表...")
+        visualize_main()
+        logger.info("基线对比实验与可视化完成")
+        return
+    else:
+        logger.error(f"未知实验类型: {exp}")
+        raise SystemExit(2)
 
 def visualize_results(args):
     """
@@ -108,93 +134,81 @@ def visualize_results(args):
         args: 命令行参数
     """
     from src.visualization.plotter import plot_results
+    import glob
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import numpy as np
 
     # 结果目录
     results_dir = os.path.join(os.path.dirname(__file__), 'results', 'data')
-    figures_dir = os.path.join(os.path.dirname(__file__), 'results', 'figures')
+    figures_dir = os.path.join(os.path.dirname(__file__), 'experiments', 'results', 'figures')
+    os.makedirs(results_dir, exist_ok=True)
+    os.makedirs(figures_dir, exist_ok=True)
     
     # 检查结果文件
+    result_file = None
     if args.result_file and os.path.exists(args.result_file):
         result_file = args.result_file
     else:
-        # 查找最新的结果文件
-        result_files = [f for f in os.listdir(results_dir) if f.endswith('.json')]
-        if not result_files:
-            logger.error("未找到结果文件")
-            return
-        
-        # 按修改时间排序
-        result_files.sort(key=lambda x: os.path.getmtime(os.path.join(results_dir, x)), reverse=True)
-        result_file = os.path.join(results_dir, result_files[0])
+        # 优先在 results/data 下找 JSON
+        jsons_primary = sorted(glob.glob(os.path.join(results_dir, '*.json')), key=os.path.getmtime, reverse=True)
+        if jsons_primary:
+            result_file = jsons_primary[0]
+        else:
+            # 回退到 experiments/results/data 下找 JSON
+            exp_data_dir = os.path.join(os.path.dirname(__file__), 'experiments', 'results', 'data')
+            jsons_fallback = sorted(glob.glob(os.path.join(exp_data_dir, '*.json')), key=os.path.getmtime, reverse=True)
+            if jsons_fallback:
+                result_file = jsons_fallback[0]
+            else:
+                # 再次回退寻找 CSV（routing_comparison 产物）
+                csvs = sorted(glob.glob(os.path.join(exp_data_dir, '*.csv')), key=os.path.getmtime, reverse=True)
+                if csvs:
+                    result_file = csvs[0]
+                else:
+                    logger.error("未找到结果文件 (JSON/CSV)")
+                    return
     
     logger.info(f"使用结果文件: {result_file}")
     
-    # 可视化结果
-    plot_results(result_file, figures_dir)
-    plt.figure(figsize=(10, 8))
-    
-    # 准备雷达图数据
-    categories = ['网络生命周期', '数据包传递率', '端到端延迟', '预测准确性', '可靠性']
-    N = len(categories)
-    
-    # 计算角度
-    angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
-    angles += angles[:1]  # 闭合图形
-    
-    # 初始化雷达图
-    ax = plt.subplot(111, polar=True)
-    
-    # 设置雷达图的角度，用于平分切开一个圆
-    plt.xticks(angles[:-1], categories)
-    
-    # 设置雷达图的范围
-    ax.set_rlabel_position(0)
-    plt.yticks([0.2, 0.4, 0.6, 0.8, 1.0], ["0.2", "0.4", "0.6", "0.8", "1.0"], color="grey", size=7)
-    plt.ylim(0, 1)
-    
-    # 绘制雷达图
-    for protocol in results:
-        # 归一化数据
-        values = []
-        for metric in metrics:
-            value = results[protocol][metric]
-            
-            # 对于延迟，值越小越好，需要反转
-            if metric == 'end_to_end_delay':
-                max_delay = max([results[p]['end_to_end_delay'] for p in results])
-                if max_delay > 0:
-                    value = 1 - (value / max_delay)
-                else:
-                    value = 1
-            
-            # 归一化到0-1之间
-            if metric != 'end_to_end_delay':
-                max_value = max([results[p][metric] for p in results])
-                if max_value > 0:
-                    value = value / max_value
-                else:
-                    value = 0
-            
-            values.append(value)
-        
-        # 闭合数据
-        values += values[:1]
-        
-        # 绘制折线图
-        ax.plot(angles, values, linewidth=2, linestyle='solid', label=protocol)
-        ax.fill(angles, values, alpha=0.1)
-    
-    # 添加图例
-    plt.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1))
-    
-    plt.title("不同路由协议的综合性能比较")
-    
-    # 保存图表
-    plt.tight_layout()
-    plt.savefig(os.path.join(figures_dir, f"radar_chart_{timestamp}.png"))
-    plt.close()
-    
-    logger.info(f"可视化结果已保存到: {figures_dir}")
+    # 根据文件类型可视化
+    if result_file.lower().endswith('.json'):
+        plot_results(result_file, figures_dir)
+        logger.info(f"JSON结果图表已生成到: {figures_dir}")
+    elif result_file.lower().endswith('.csv'):
+        # 生成 routing_comparison 的条形图（与脚本一致）
+        df = pd.read_csv(result_file)
+        ts = datetime.now().strftime('%Y%m%d_%H%M%S')
+        sns.set(style="whitegrid")
+        # 聚合 mean±std
+        agg = df.groupby(['router', 'sod']).agg(
+            te_mean=('total_energy', 'mean'), te_std=('total_energy', 'std'),
+            alive_mean=('final_alive', 'mean'), alive_std=('final_alive', 'std')
+        ).reset_index()
+        routers = ['aco', 'baseline']
+        sods = ['off', 'on']
+        x = np.arange(len(routers))
+        width = 0.35
+        fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+        for i, metric in enumerate([('te_mean','te_std','Total Energy'), ('alive_mean','alive_std','Final Alive')]):
+            mean_col, std_col, title = metric
+            vals_off = [agg[(agg.router==r) & (agg.sod=='off')][mean_col].values[0] for r in routers]
+            err_off  = [agg[(agg.router==r) & (agg.sod=='off')][std_col].values[0] for r in routers]
+            vals_on  = [agg[(agg.router==r) & (agg.sod=='on')][mean_col].values[0]  for r in routers]
+            err_on   = [agg[(agg.router==r) & (agg.sod=='on')][std_col].values[0]  for r in routers]
+            axes[i].bar(x-width/2, vals_off, width, yerr=err_off, capsize=4, label='SoD Off')
+            axes[i].bar(x+width/2, vals_on,  width, yerr=err_on,  capsize=4, label='SoD On')
+            axes[i].set_xticks(x); axes[i].set_xticklabels([r.upper() for r in routers])
+            axes[i].set_title(title)
+            axes[i].legend()
+        plt.tight_layout()
+        fig_path = os.path.join(figures_dir, f'routing_comparison_{ts}.png')
+        plt.savefig(fig_path, dpi=300, bbox_inches='tight')
+        plt.close()
+        logger.info(f"CSV结果图表已生成: {fig_path}")
+    else:
+        logger.error(f"未知结果文件类型: {result_file}")
 
 def main():
     """
@@ -216,7 +230,7 @@ def main():
     
     # 运行实验命令
     experiment_parser = subparsers.add_parser('experiment', help='运行实验')
-    experiment_parser.add_argument('--experiment', choices=['routing_comparison'], default='routing_comparison', help='实验类型')
+    experiment_parser.add_argument('--experiment', choices=['routing_comparison', 'comprehensive', 'baseline_comparison'], default='routing_comparison', help='实验类型')
     experiment_parser.add_argument('--config', type=str, help='配置文件路径')
     
     # 可视化结果命令

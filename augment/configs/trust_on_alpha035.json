@@ -1,0 +1,18 @@
+{
+  "area": [100, 100],
+  "nodes": 50,
+  "bs": [50.0, 50.0],
+  "comm_range": 30.0,
+  "payload_bits": 1024,
+  "gen_rate": 0.2,
+  "retries": 2,
+  "noise": 0.2,
+  "rounds": 200,
+  "seeds": [1, 2, 3, 4, 5],
+  "sod_enabled": false,
+  "trust_enabled": true,
+  "trust_alpha": 0.35,
+  "trust_prior_succ": 0.8,
+  "out_json": "augment/results/trust_on_alpha035_agg.json",
+  "per_seed_csv": "augment/results/trust_on_alpha035_seed_{seed}.csv"
+}

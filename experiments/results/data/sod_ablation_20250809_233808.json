@@ -1,0 +1,66 @@
+{
+  "sod_off": {
+    "config": {
+      "sod_enabled": false,
+      "rounds": 60,
+      "num_nodes": 30
+    },
+    "summary": {
+      "total_energy_consumed": 0.017277210237782663,
+      "avg_sod_trigger_ratio": 1.0,
+      "final_alive_nodes": 30
+    },
+    "final_metrics": {
+      "total_energy_consumption": 0.017277210237793383,
+      "average_energy_consumption": 0.0005759070079264461,
+      "energy_efficiency": 0.9997120464960367,
+      "first_node_death": 0,
+      "half_nodes_death": 0,
+      "network_lifetime": 0,
+      "packet_delivery_ratio": 0.8502159032460406,
+      "average_delay": 21.147779656059235,
+      "throughput": 300,
+      "average_hop_count": 2.2168849117182443,
+      "routing_overhead": 0.180385089384518,
+      "average_trust_value": 0.6682624711722628,
+      "malicious_detection_rate": 0.0,
+      "false_positive_rate": 0.0,
+      "prediction_accuracy": 0.0,
+      "prediction_mae": 0.0,
+      "prediction_rmse": 0.0,
+      "sod_trigger_ratio": 1.0
+    }
+  },
+  "sod_on": {
+    "config": {
+      "sod_enabled": true,
+      "rounds": 60,
+      "num_nodes": 30
+    },
+    "summary": {
+      "total_energy_consumed": 0.0032000431363076566,
+      "avg_sod_trigger_ratio": 0.17722222222222223,
+      "final_alive_nodes": 30
+    },
+    "final_metrics": {
+      "total_energy_consumption": 0.0032000431363030657,
+      "average_energy_consumption": 0.00010666810454343553,
+      "energy_efficiency": 0.9999466659477283,
+      "first_node_death": 0,
+      "half_nodes_death": 0,
+      "network_lifetime": 0,
+      "packet_delivery_ratio": 0.8502159032460406,
+      "average_delay": 21.147779656059235,
+      "throughput": 300,
+      "average_hop_count": 2.2168849117182443,
+      "routing_overhead": 0.180385089384518,
+      "average_trust_value": 0.6683124395992609,
+      "malicious_detection_rate": 0.0,
+      "false_positive_rate": 0.0,
+      "prediction_accuracy": 0.0,
+      "prediction_mae": 0.0,
+      "prediction_rmse": 0.0,
+      "sod_trigger_ratio": 0.23333333333333334
+    }
+  }
+}

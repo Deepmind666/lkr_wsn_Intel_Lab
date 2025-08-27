@@ -70,7 +70,10 @@ def main():
                         ax.axvline(r, color='red', linestyle='--', alpha=0.3)
                         ax.text(r, ax.get_ylim()[1]*0.9, marker_name, color='red', fontsize=8)
             plt.tight_layout()
-            plt.savefig(fig_dir / f'{key}_per_round_latest.png', dpi=300, bbox_inches='tight')
+            png = fig_dir / f'{key}_per_round_latest.png'
+            pdf = fig_dir / f'{key}_per_round_latest.pdf'
+            plt.savefig(png, dpi=300, bbox_inches='tight')
+            plt.savefig(pdf, dpi=300, bbox_inches='tight')
             plt.close()
 
     # 条形图对比
@@ -82,6 +85,7 @@ def main():
     axes[1].set_ylim(0, 1)
     plt.tight_layout()
     plt.savefig(fig_dir / 'sod_ablation_summary_latest.png', dpi=300, bbox_inches='tight')
+    plt.savefig(fig_dir / 'sod_ablation_summary_latest.pdf', dpi=300, bbox_inches='tight')
     plt.close()
 
     print('Report generated:')

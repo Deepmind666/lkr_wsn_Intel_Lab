@@ -1,0 +1,2 @@
+seed,generated,delivered,pdr,avg_delay_s,avg_hops,ctrl_hello,ctrl_cluster,ctrl_routing,ctrl_trust,data_pkts,tx_j,rx_j,cpu_j,sod_candidates,sod_sent,attack_active_rounds,attack_compromised,drop_blackhole,drop_grayhole,sinkhole_choices,trust_updates,malicious_detected
+6,700,215,0.307143,0.058419,3.474419,61920,3096,6192,2064,215,2.657285e-01,5.808128e-01,7.318000e-02,6000,700,110,25,0,168,0,6000,326

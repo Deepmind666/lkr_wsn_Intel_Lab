@@ -1,0 +1,4 @@
+config,nodes,rounds,comm_range,noise,trust_enabled,sod_enabled,attack_enabled,attack_types,attack_ratio,grayhole_p,sinkhole_bias,attack_start,attack_end,pdr_mean,delay_mean,hops_mean,tx_j_mean,rx_j_mean,cpu_j_mean,attack_active_rounds_mean,attack_compromised_mean,drop_blackhole_mean,drop_grayhole_mean,sinkhole_choices_mean,trust_updates_mean,malicious_detected_mean
+attack_grayhole_50pct_p070.json,50,120,30.0,0.0,True,True,True,grayhole,0.5,0.7,,10,1000000000,0.2992855,0.060134,3.112616,0.29734395,0.5970944,0.07793,110.0,25.0,0.0,78.5,0.0,6000.0,260.5
+attack_blackhole_20pct.json,50,120,30.0,0.0,True,True,True,blackhole,0.2,,,20,1000000000,0.3085715,0.0609945,3.1730005,0.29905525,0.5981696,0.07848,100.0,10.0,63.0,0.0,0.0,6000.0,262.0
+attack_sinkhole_bias080_fixed_ids.json,50,120,30.0,0.0,True,True,True,sinkhole,0.1,,0.8,30,1000000000,0.3764285,0.060464,2.807483,0.30914955,0.5997824,0.08005999999999999,90.0,3.0,0.0,0.0,179.0,6000.0,173.0

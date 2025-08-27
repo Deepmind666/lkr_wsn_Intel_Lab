@@ -19,6 +19,8 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.enhanced_eehfr_system import EnhancedEEHFRSystem, SystemConfig
+from contextlib import redirect_stdout, redirect_stderr
+import os
 
 
 def run_cfg(k, W, dd, dn, seed=0, rounds=60, num_nodes=30):
@@ -36,19 +38,23 @@ def run_cfg(k, W, dd, dn, seed=0, rounds=60, num_nodes=30):
         idle_lpm_time_s=0.004,
         random_seed=seed,
     )
-    sys = EnhancedEEHFRSystem(cfg)
-    hist = sys.run_simulation()
+    # silence verbose prints during grid search
+    devnull = open(os.devnull, 'w')
+    with redirect_stdout(devnull), redirect_stderr(devnull):
+        sys = EnhancedEEHFRSystem(cfg)
+        hist = sys.run_simulation()
     total_energy = float(np.sum([h['energy_consumed'] for h in hist]))
     avg_ratio = float(np.mean([h['performance'].sod_trigger_ratio for h in hist]))
     return total_energy, avg_ratio
 
 
 def main():
-    ks = [0.5, 1.0, 1.5, 2.0]
-    Ws = [12, 24, 48]
+    # pilot grid (fast). Expand later if needed.
+    ks = [0.5, 1.5]
+    Ws = [12, 24]
     dds = [0.2, 0.5]
     dns = [0.1, 0.2]
-    seeds = [0, 1]
+    seeds = [0]
 
     rows = []
     for k, W, dd, dn, seed in itertools.product(ks, Ws, dds, dns, seeds):
